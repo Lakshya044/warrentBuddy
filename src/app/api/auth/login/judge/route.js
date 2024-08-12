@@ -22,7 +22,7 @@ export async function POST(req) {
 
         // Set the token as a cookie
         const response = NextResponse.json({ message: 'Login successful' });
-        setTokenCookie(response, token);
+        setTokenCookie(response, token, user.role, user.email);
 
         return response;
     } catch (error) {

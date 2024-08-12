@@ -1,4 +1,3 @@
-// server.js
 const { createServer } = require('http');
 const { parse } = require('url');
 const next = require('next');
@@ -11,29 +10,31 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 // Prepare and start the server
-app.prepare().then(async() => {
-  await dbConnect();
-  createServer((req, res) => {
-    const parsedUrl = parse(req.url, true);
-    const { pathname, query } = parsedUrl;
-    console.log(`Handling request for: ${pathname}`);
+app.prepare().then(async () => {
+    await dbConnect(); // Ensure the database connection is established
 
-    // Handle custom routes
-    if (pathname === '/a') {
-      app.render(req, res, '/a', query);
-      console.log(`Query parameters for /a: ${JSON.stringify(query)}`);
-    } else if (pathname === '/b') {
-      app.render(req, res, '/b', query);
-      console.log(`Query parameters for /b: ${JSON.stringify(query)}`);
-    } else if (pathname.startsWith('/api/')) {
-      // Handle API routes
-      handle(req, res, parsedUrl);
-    } else {
-      // Handle other requests
-      handle(req, res, parsedUrl);
-    }
-  }).listen(3000, (err) => {
-    if (err) throw err;
-    console.log(`> Ready on http://localhost:3000`);
-  });
+    createServer((req, res) => {
+        const parsedUrl = parse(req.url, true);
+        const { pathname } = parsedUrl;
+
+        console.log(`Handling request for: ${pathname}`);
+        console.log('Full URL:', req.url);
+
+        try {
+            if (pathname.startsWith('/api/')) {
+                console.log('Routing to Next.js API handler');
+                handle(req, res, parsedUrl);
+            } else {
+                console.log('Routing to Next.js page handler');
+                handle(req, res, parsedUrl);
+            }
+        } catch (error) {
+            console.error('Error handling request:', error);
+            res.writeHead(500, { 'Content-Type': 'text/plain' });
+            res.end('Internal Server Error');
+        }
+    }).listen(port, (err) => {
+        if (err) throw err;
+        console.log(`> Ready on http://localhost:${port}`);
+    });
 });
