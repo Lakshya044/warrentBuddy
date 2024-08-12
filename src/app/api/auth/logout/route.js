@@ -6,6 +6,7 @@ export async function POST(req) {
 
     // Clear the token cookie
     response.cookies.delete('token');
-  
+    response.cookies.delete('email');
+    response.cookies.delete('role');
     return response;
 }

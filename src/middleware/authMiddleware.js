@@ -11,7 +11,11 @@ export const authenticate = (handler) => {
             }
 
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            req.user = decoded;
+            req.user = {
+                id: decoded.userId,
+                email: decoded.email,
+                role: decoded.role // Ensure this is set correctly
+            };
 
             return handler(req);
         } catch (error) {
@@ -23,7 +27,8 @@ export const authenticate = (handler) => {
 export const checkRole = (requiredRole) => {
     return (handler) => {
         return async (req) => {
-            if (req.user.role !== requiredRole) {
+            if (!req.user || req.user.role !== requiredRole) {
+                console.log(`Authorization failed: User role is not ${requiredRole}`);
                 return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
             }
             return handler(req);
