@@ -17,19 +17,19 @@ app.prepare().then(async () => {
         const parsedUrl = parse(req.url, true);
         const { pathname } = parsedUrl;
 
-        console.log(`Handling request for: ${pathname}`);
-        console.log('Full URL:', req.url);
+        // console.log(`Handling request for: ${pathname}`);
+        // console.log('Full URL:', req.url);
 
         try {
             if (pathname.startsWith('/api/')) {
-                console.log('Routing to Next.js API handler');
+                // console.log('Routing to Next.js API handler');
                 handle(req, res, parsedUrl);
             } else {
-                console.log('Routing to Next.js page handler');
+                // console.log('Routing to Next.js page handler');
                 handle(req, res, parsedUrl);
             }
         } catch (error) {
-            console.error('Error handling request:', error);
+            // console.error('Error handling request:', error);
             res.writeHead(500, { 'Content-Type': 'text/plain' });
             res.end('Internal Server Error');
         }

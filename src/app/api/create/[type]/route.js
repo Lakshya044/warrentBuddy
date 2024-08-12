@@ -131,11 +131,11 @@ export async function POST(req) {
          else if (type === 'requestbail') {
             console.log("Processing bail request...");
             const body = await req.json();
-            const { aadharNo, accusedName, details, policeStationId, address } = body;
+            const { aadharNo, accusedName, details, policeStationId, address,pincode } = body;
             console.log("Request body parsed successfully");
 
             // Validate required fields
-            if (!aadharNo || !accusedName || !details || !policeStationId || !address) {
+            if (!aadharNo || !accusedName ||!pincode|| !details || !policeStationId || !address) {
                 console.log("Validation failed: Missing required fields");
                 return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
             }
@@ -146,6 +146,7 @@ export async function POST(req) {
                 accusedName,
                 details,
                 pincode,
+                policeStationId,
                 address,
                 status: 'Pending'
             });
@@ -166,17 +167,19 @@ export async function POST(req) {
             }
 
             const body = await req.json();
-            const { bailId, approvalStatus } = body;
+            const { policeStationId, aadharNo, approvalStatus } = body;
             console.log("Request body parsed successfully");
-
+console.log(policeStationId);
+console.log(aadharNo);
+console.log(approvalStatus);
             // Validate required fields
-            if (!bailId || approvalStatus === undefined) {
+            if (!policeStationId||!aadharNo || approvalStatus === undefined) {
                 console.log("Validation failed: Missing required fields");
                 return NextResponse.json({ message: 'Bail ID and approval status are required' }, { status: 400 });
             }
 
             // Find and update the bail request
-            const bail = await Bail.findById(bailId);
+            const bail = await Bail.findOne({policeStationId : policeStationId});
             if (!bail) {
                 console.log("Bail request not found");
                 return NextResponse.json({ message: 'Bail request not found' }, { status: 404 });
@@ -186,7 +189,7 @@ export async function POST(req) {
             bail.status = approvalStatus; // Example: 'Approved' or 'Rejected'
             await bail.save();
             console.log("Bail approval/rejection processed successfully");
-            return NextResponse.json({ message: `Bail ${approvalStatus} processed successfully`, bailId: bail._id }, { status: 200 });
+            return NextResponse.json({ message: `Bail ${approvalStatus} processed successfully` }, { status: 200 });
         }
 
         console.log("Invalid request type");
