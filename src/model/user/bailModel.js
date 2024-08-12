@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const bailSchema = new mongoose.Schema({
     aadharNo: {
-        type: Number,
+        type: String,
         required: true,
         unique: true
     },
@@ -20,6 +20,10 @@ const bailSchema = new mongoose.Schema({
     address: {
         type: String,
         required: true
+    },
+    policeStationId: {
+        type: String, // Ensure this is String
+        required: [true, 'Police station ID is required']
     },
     status: {
         type: String,
