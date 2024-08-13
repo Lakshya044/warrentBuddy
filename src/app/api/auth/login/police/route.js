@@ -9,21 +9,23 @@ export async function POST(req) {
         await dbConnect();
 
         const { policeId, email } = await req.json(); // Read JSON body from request
-
+console.log(policeId, email);
         // Find user in the Police collection
         const user = await Police.findOne({ policeId, email });
-
-        if (!user || user.role !== 2) {
+console.log(user.role)
+if (!user || user.role !== 2) {
             return NextResponse.json({ message: 'Invalid credentials' }, { status: 401 });
         }
-
+console.log("user",user);
+console.log("user.role",user.role);
+console.log("user.email",user.email);
         // Generate JWT token
-        const token = generateToken(user, 2);
+        const token = generateToken(user);
 
         // Set the token as a cookie
         const response = NextResponse.json({ message: 'Login successful' });
-        setTokenCookie(response, token, user.role, user.email);
-
+       const cook= setTokenCookie(response, user);
+console.log("cook",cook);
         return response;
     } catch (error) {
         return NextResponse.json(

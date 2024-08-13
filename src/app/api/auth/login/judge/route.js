@@ -18,12 +18,12 @@ export async function POST(req) {
         }
 
         // Generate JWT token
-        const token = generateToken(user, 1);
+        const token = generateToken(user);
 
         // Set the token as a cookie
         const response = NextResponse.json({ message: 'Login successful' });
-        setTokenCookie(response, token, user.role, user.email);
-
+        setTokenCookie(response, user);
+// console.log("cook",cook);
         return response;
     } catch (error) {
         return NextResponse.json(

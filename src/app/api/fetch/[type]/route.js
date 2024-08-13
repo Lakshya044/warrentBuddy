@@ -14,21 +14,17 @@ export async function POST(req) {
 
         // Parse request body
         const body = await req.json();
-        const { aadharNo } = body;
+        const { aadharNo,policeStationId} = body;
 
-        if (typeof aadharNo !== 'number') {
-            return NextResponse.json({ message: 'Aadhar number must be a number' }, { status: 400 });
-        }
+        
 
         console.log(`Request type: ${type}, AadharNo: ${aadharNo}`);
 
-        if (!aadharNo) {
-            return NextResponse.json({ message: 'Aadhar number is required' }, { status: 400 });
-        }
+      
 
         if (type === 'warrant') {
             console.log("Fetching warrant details...");
-            const warrant = await Warrant.findOne({ aadharNo });
+            const warrant = await Warrant.find({ policeStationId });
             console.log("Warrant fetched:", warrant);
 
             if (!warrant) {
@@ -50,7 +46,7 @@ export async function POST(req) {
 
         } else if (type === 'fir') {
             console.log("Fetching FIR details...");
-            const fir = await FIR.findOne({ aadharNo });
+            const fir = await FIR.find({ policeStationId });
             console.log("FIR fetched:", fir);
 
             if (!fir) {

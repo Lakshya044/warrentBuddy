@@ -1,11 +1,12 @@
 import React from 'react'
-import CreateWarrant from '@/components/create_warrent'
-import ApproveBail from '@/components/approve_bail'
+
+import AdminDashboard from './Admin_Dashboard/page'
+import PoliceDashboard from './Police_Dashboard/page'
 function page() {
   return (
     <div>
-      <CreateWarrant/>
-      {/* <ApproveBail/> */}
+      {/* <PoliceDashboard/> */}
+      <AdminDashboard/>
     </div>
   )
 }

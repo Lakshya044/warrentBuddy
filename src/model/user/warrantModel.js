@@ -47,7 +47,7 @@ const firSchema = new mongoose.Schema({
     aadharNo: { type: Number, required: true },
     details: { type: String, required: true },
     pincode: { type: Number, required: true },
-    policeStationId: { type: mongoose.Schema.Types.ObjectId, ref: 'PoliceStation', required: true },
+    policeStationId: { type: String,  required: true },
     status: { type: String, default: 'Pending' },
     address: { type: String, required: true }
 });
