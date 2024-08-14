@@ -1,6 +1,7 @@
+
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbconnect';
-import { Warrant } from '@/model/user/warrantModel'; 
+import { Warrant,UserWarrant } from '@/model/user/warrantModel'; 
 import { FIR } from '@/model/user/warrantModel'; 
 import { Bail } from '@/model/user/bailModel';
 import { authenticate, checkRole } from '@/middleware/authMiddleware';
@@ -18,7 +19,7 @@ const processWarrantRequest = async (body) => {
         return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
     }
 
-    const newWarrant = new Warrant({ warrantNo, warrantType, accusedName, aadharNo, details, pincode, policeStationId, address });
+    const newWarrant = new UserWarrant({ warrantNo, warrantType, accusedName, aadharNo, details, pincode, policeStationId, address });
     await newWarrant.save();
     return NextResponse.json({ message: 'Warrant issued successfully', warrantId: newWarrant._id }, { status: 201 });
 };
@@ -37,17 +38,17 @@ const processFIRRequest = async (body) => {
 };
 
 // Function to process bail requests
-const processBailRequest = async (body) => {
-    const { aadharNo, accusedName, details, policeStationId, address, pincode } = body;
+// const processBailRequest = async (body) => {
+//     const { aadharNo, accusedName, details, policeStationId, address, pincode } = body;
 
-    if (!aadharNo || !accusedName || !pincode || !details || !policeStationId || !address) {
-        return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
-    }
+//     if (!aadharNo || !accusedName || !pincode || !details || !policeStationId || !address) {
+//         return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
+//     }
 
-    const newBail = new Bail({ aadharNo, accusedName, details, pincode, policeStationId, address, status: 'Pending' });
-    await newBail.save();
-    return NextResponse.json({ message: 'Bail request submitted successfully', bailId: newBail._id }, { status: 201 });
-};
+//     const newBail = new Bail({ aadharNo, accusedName, details, pincode, policeStationId, address, status: 'Pending' });
+//     await newBail.save();
+//     return NextResponse.json({ message: 'Bail request submitted successfully', bailId: newBail._id }, { status: 201 });
+// };
 
 // Function to process bail approval/rejection
 const processBailApproval = async (body) => {
@@ -65,6 +66,19 @@ const processBailApproval = async (body) => {
     bail.status = approvalStatus;
     await bail.save();
     return NextResponse.json({ message: `Bail ${approvalStatus} processed successfully` }, { status: 200 });
+};
+
+// Function to process UserWarrant requests
+const processUserWarrantRequest = async (body) => {
+    const { warrantNo, warrantType, accusedName, aadharNo, details, pincode, status,address } = body;
+
+    if (!warrantNo || !warrantType || !accusedName || !aadharNo || !details || !pincode||!status || !address) {
+        return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
+    }
+
+    const newUserWarrant = new UserWarrant({ warrantNo, warrantType, accusedName, aadharNo, details, pincode, address, status });
+    await newUserWarrant.save();
+    return NextResponse.json({ message: 'User Warrant created successfully', warrantId: newUserWarrant._id }, { status: 201 });
 };
 
 // Main POST handler function
@@ -88,6 +102,9 @@ async function handlePOST(req) {
         } else if (type === 'bailapprove') {
             return await processBailApproval(body);
 
+        } else if (type === 'userwarrant') {
+            return await processUserWarrantRequest(body);
+
         } else {
             return NextResponse.json({ message: 'Invalid request type' }, { status: 400 });
         }
@@ -104,10 +121,10 @@ export const POST = authenticate((req, res, next) => {
 
     if (type === 'warrant' || type === 'bailapprove') {
         return checkRole(1)(handlePOST)(req, res, next); // Role 1 for warrant and bail approval
-    } else if (type === 'FIR') {
-        return checkRole(2)(handlePOST)(req, res, next); // Role 2 for FIR
-    } else if (type === 'requestbail') {
-        return handlePOST(req, res); // No role restriction for requesting bail
+    } else if (type === 'FIR' || type === 'userwarrant') {
+        return checkRole(2)(handlePOST)(req, res, next); // Role 2 for FIR and user warrant
+    // } else if (type === 'requestbail') {
+    //     return handlePOST(req, res); // No role restriction for requesting bail
     } else {
         return handleUnauthorized(); // Handle any other cases as unauthorized
     }
