@@ -1,6 +1,7 @@
 import dbConnect from '@/lib/dbconnect';
-import { Warrant, FIR } from '@/model/user/warrantModel'; 
+import { Warrant, FIR,UserWarrant } from '@/model/user/warrantModel'; 
 import { Bail } from '@/model/user/bailModel'; // Adjust path as needed
+
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
@@ -14,15 +15,22 @@ export async function POST(req) {
 
         // Parse request body
         const body = await req.json();
-        const { aadharNo,policeStationId} = body;
-
-        
+        const { aadharNo, policeStationId } = body;
 
         console.log(`Request type: ${type}, AadharNo: ${aadharNo}`);
 
-      
+        if (type === 'userwarrant') {
+            console.log("Fetching user warrant details...");
+            const userWarrant = await UserWarrant.findOne({ aadharNo });
+            console.log("User warrant fetched:", userWarrant);
 
-        if (type === 'warrant') {
+            if (!userWarrant) {
+                return NextResponse.json({ message: 'User warrant not found' }, { status: 404 });
+            }
+
+            return NextResponse.json({ userWarrant }, { status: 200 });
+
+        } else if (type === 'warrant') {
             console.log("Fetching warrant details...");
             const warrant = await Warrant.find({ policeStationId });
             console.log("Warrant fetched:", warrant);
@@ -35,7 +43,7 @@ export async function POST(req) {
 
         } else if (type === 'bail') {
             console.log("Fetching bail details...");
-            const bail = await Bail.findOne({ aadharNo });
+            const bail = await Bail.find({ policeStationId });
             console.log("Bail fetched:", bail);
 
             if (!bail) {
@@ -55,7 +63,31 @@ export async function POST(req) {
 
             return NextResponse.json({ fir }, { status: 200 });
 
-        } else {
+        } else if (type === 'userfir') {
+            console.log("Fetching user FIR details...");
+            const userFIRs = await FIR.find({ aadharNo });
+            console.log("User FIRs fetched:", userFIRs);
+
+            if (userFIRs.length === 0) {
+                return NextResponse.json({ message: 'No FIRs found for this Aadhar number' }, { status: 404 });
+            }
+
+            return NextResponse.json({ userFIRs }, { status: 200 });
+
+        } 
+        else if(type==='requestbail'){
+            
+                const { aadharNo, accusedName, details, policeStationId, address, pincode } = body;
+            
+                if (!aadharNo || !accusedName || !pincode || !details || !policeStationId || !address) {
+                    return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
+                }
+            
+                const newBail = new Bail({ aadharNo, accusedName, details, pincode, policeStationId, address, status: 'Pending' });
+                await newBail.save();
+                return NextResponse.json({ message: 'Bail request submitted successfully', bailId: newBail._id }, { status: 201 });
+           
+        }else {
             console.log("Invalid request type");
             return NextResponse.json({ message: 'Invalid request type' }, { status: 400 });
         }
@@ -64,4 +96,3 @@ export async function POST(req) {
         return NextResponse.json({ message: 'Server error', error: error.message }, { status: 500 });
     }
 }
-

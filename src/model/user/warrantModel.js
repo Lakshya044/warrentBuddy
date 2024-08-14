@@ -53,6 +53,56 @@ const firSchema = new mongoose.Schema({
 });
 
 
+
+const UserWarrantSchema = new mongoose.Schema({
+    warrantNo: {
+        type: String,
+        required: true,
+        unique: true, // Ensures that each warrant number is unique
+    },
+    warrantType: {
+        type: String,
+        required: true,
+        // Define warrant types as needed
+    },
+    accusedName: {
+        type: String,
+        required: true,
+    },
+    aadharNo: {
+        type: String,
+        required: true,
+    },
+    details: {
+        type: String,
+        required: true,
+    },
+    pincode: {
+        type: String,
+        required: true,
+    },
+    address: {
+        type: String,
+        required: true,
+    },
+    status: {
+        type: String,
+        required: true,
+        
+    },
+    issueDate: {
+        type: Date,
+        required: true,
+        default: Date.now
+    }
+}, {
+    timestamps: true
+});
+
+export const UserWarrant = mongoose.models.UserWarrant || mongoose.model('UserWarrant', UserWarrantSchema);
+
+ 
+
 // Use a dynamic model name to avoid recompilation issues
 
 export const Warrant = mongoose.models.Warrant || mongoose.model('Warrant', warrantSchema);
