@@ -9,19 +9,15 @@ import LowerNavbar from '@/components/Navbar_Lower'
 import HomeGrid from '@/components/Home/Home'
 import Footer from '@/components/Footer'
 import ClientLogin from '@/components/Login/ClientLogin'
+import AdminLogin from '@/components/Login/AdminLogin'
 import Registration from '@/components/Login/Registration'
 function page() {
   return (
     <div>
-      <UpperNavbar/>
-      <LowerNavbar/>
+     
       <HomeGrid/>
-      <Footer/>
-      <ClientLogin/>
-      <Registration/>
-      <PoliceDashboard/>
-      <AdminDashboard/>
-     <UserDashboard/>
+      
+      
     </div>
   )
 }

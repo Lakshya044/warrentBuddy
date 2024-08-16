@@ -36,7 +36,7 @@ export const checkRole = (requiredRole) => {
             
             if (!req.user || req.user.role !== requiredRole) {
                 console.log(`Authorization failed: User role is not ${requiredRole}`);
-                return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+                return NextResponse.json({ message: 'Unauthorized. You do not have permission to perform this action.' }, { status: 403 });
             }
             return handler(req);
         };
