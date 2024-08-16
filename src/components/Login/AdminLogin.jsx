@@ -4,33 +4,48 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 function AdminLogin() {
-  const [idNumber, setIdNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [id, setId] = useState(""); // This will be either policeId or judgeId
+  const [isJudge, setIsJudge] = useState(true);
   const router = useRouter();
 
-  const handleIdNumberChange = (event) => {
-    setIdNumber(event.target.value);
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handleIdChange = (event) => {
+    setId(event.target.value);
+  };
+
+  const handleRoleChange = (event) => {
+    setIsJudge(event.target.value === "judge");
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Send a POST request to the server for authentication
-    let response;
+    const requestBody = isJudge
+      ? { judgeId: id, email }
+      : { policeId: id, email };
+
+    const endpoint = isJudge ? "/api/auth/login/judge" : "/api/auth/login/police";
+
     try {
-      response = await fetch("/api/admin/login", {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ idNumber }),
+        body: JSON.stringify(requestBody),
       });
+
       const res = await response.json();
 
-      if (res.success) {
-        // Redirect to the admin dashboard or appropriate page
-        router.push("/adminDashboard");
+      if (response.ok) {
+        const dashboardPath = isJudge ? "/Admin_Dashboard" : "/Police_Dashboard";
+        router.push(dashboardPath);
       } else {
-        alert("Invalid ID number");
+        alert("Invalid email or ID");
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -44,18 +59,63 @@ function AdminLogin() {
         <h2 className="text-2xl font-bold mb-6 text-center">Admin Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="idNumber" className="block text-gray-700 font-medium mb-2">
-              ID Number
+            <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={handleEmailChange}
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-500"
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="id" className="block text-gray-700 font-medium mb-2">
+              {isJudge ? "Judge ID" : "Police ID"}
             </label>
             <input
               type="text"
-              id="idNumber"
-              value={idNumber}
-              onChange={handleIdNumberChange}
+              id="id"
+              value={id}
+              onChange={handleIdChange}
               className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-500"
-              placeholder="Enter your ID number"
+              placeholder={`Enter your ${isJudge ? "Judge ID" : "Police ID"}`}
               required
             />
+          </div>
+          <div className="mb-6">
+            <label className="block text-gray-700 font-medium mb-2">Login as:</label>
+            <div className="flex items-center">
+              <input
+                type="radio"
+                id="role-judge"
+                name="role"
+                value="judge"
+                checked={isJudge}
+                onChange={handleRoleChange}
+                className="mr-2"
+              />
+              <label htmlFor="role-judge" className="text-gray-700">
+                Judge
+              </label>
+            </div>
+            <div className="flex items-center mt-2">
+              <input
+                type="radio"
+                id="role-police"
+                name="role"
+                value="police"
+                checked={!isJudge}
+                onChange={handleRoleChange}
+                className="mr-2"
+              />
+              <label htmlFor="role-police" className="text-gray-700">
+                Police
+              </label>
+            </div>
           </div>
           <div className="flex justify-center">
             <button

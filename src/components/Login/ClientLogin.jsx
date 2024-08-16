@@ -20,7 +20,7 @@ function ClientLogin() {
     event.preventDefault();
 
     // Send login request to server
-    const response = await fetch("http://localhost:5000/client/login", {
+    const response = await fetch("/api/auth/login/client", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,10 +32,10 @@ function ClientLogin() {
     });
 
     const res = await response.json();
-
-    if (res.statusCode === 201) {
+console.log("res",res);
+    if (response.ok) {
       // Navigate to client dashboard or home page
-      router.push("/client/dashboard");
+      router.push("/User_Dashboard");
     } else {
       alert("Invalid credentials. Please try again.");
     }

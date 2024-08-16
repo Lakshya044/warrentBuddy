@@ -19,7 +19,7 @@ const processWarrantRequest = async (body) => {
         return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
     }
 
-    const newWarrant = new UserWarrant({ warrantNo, warrantType, accusedName, aadharNo, details, pincode, policeStationId, address });
+    const newWarrant = new Warrant({ warrantNo, warrantType, accusedName, aadharNo, details, pincode, policeStationId, address });
     await newWarrant.save();
     return NextResponse.json({ message: 'Warrant issued successfully', warrantId: newWarrant._id }, { status: 201 });
 };
@@ -72,7 +72,7 @@ const processBailApproval = async (body) => {
 const processUserWarrantRequest = async (body) => {
     const { warrantNo, warrantType, accusedName, aadharNo, details, pincode, status,address } = body;
 
-    if (!warrantNo || !warrantType || !accusedName || !aadharNo || !details || !pincode||!status || !address) {
+    if (!warrantNo || !warrantType || !accusedName || !aadharNo || !details || !pincode || !address) {
         return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
     }
 

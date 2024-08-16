@@ -5,12 +5,13 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import RoleSelectModal from './RoleSelectModel';
 
+
 function LowerNavbar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
   const handleSignUpClick = () => {
-    router.push('/registration');
+    router.push('/signup');
   };
 
   const handleLoginClick = () => {

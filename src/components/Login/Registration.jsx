@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 function Registration() {
   const [formData, setFormData] = useState({
-    username: "",
+    name: "",
     email: "",
     password: "",
     country: "",
@@ -29,7 +29,7 @@ function Registration() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("/api/register", {
+      const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,7 +38,7 @@ function Registration() {
       });
 
       if (response.ok) {
-        router.push("/success"); // Redirect to a success page
+        router.push("/ClientLogin"); // Redirect to a success page
       } else {
         alert("Registration failed!");
       }
@@ -55,7 +55,7 @@ function Registration() {
           <label className="block mb-2 font-semibold">Username</label>
           <input
             type="text"
-            name="username"
+            name="name"
             value={formData.username}
             onChange={handleChange}
             className="w-full p-2 border rounded"
