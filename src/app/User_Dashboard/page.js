@@ -2,6 +2,7 @@
 import ShowWarrant from '@/components/user/showwarrent';
 import ShowFir from '@/components/user/showfir';
 import RequestBail from '@/components/user/requestBail';
+import Chatbot from '@/components/user/chatbot';
 export default function UserDashboard() {
     return (
         <div className="container mx-auto p-4">
@@ -26,6 +27,7 @@ export default function UserDashboard() {
                 {/* Approve Bail Component */}
                 <div className="w-full md:w-1/2 p-4 bg-gray-300 rounded-md">
                    {/* <UserWarrant/> */}
+                   <Chatbot/>
                 </div>
             </div>
         </div>
