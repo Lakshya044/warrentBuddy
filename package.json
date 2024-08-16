@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
+    "@google/generative-ai": "^0.17.0",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.3",
     "bcrypt": "^5.1.1",
