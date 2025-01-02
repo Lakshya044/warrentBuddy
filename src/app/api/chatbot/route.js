@@ -34,8 +34,8 @@ export async function POST(req) {
 
     if (result && result.response) {
       const responseText = await result.response.text();
-      const newString = responseText.replace(new RegExp("**", 'g'), '');
-      console.log('AI response text:', newString);
+      // const newString = responseText.replace(new RegExp("**", 'g'), '');
+      console.log('AI response text:', responseText);
       return new Response(JSON.stringify({ reply: responseText }), { status: 200 });
     } else {
       console.error('No response from AI model');

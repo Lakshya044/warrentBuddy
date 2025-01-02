@@ -32,9 +32,10 @@ const Chatbot = () => {
 
       const data = await response.json();
       const reply = data.reply;
-
+      const output = reply.replaceAll("**" , " ")
+      const text_to_display = output.replaceAll("*" , "\n \n")
       // Add AI reply to chat
-      setChat([...chat, { sender: 'user', text: message }, { sender: 'ai', text: reply }]);
+      setChat([...chat, { sender: 'user', text: message }, { sender: 'ai', text: text_to_display }]);
     } catch (error) {
       console.error('Error sending message:', error);
     } finally {
