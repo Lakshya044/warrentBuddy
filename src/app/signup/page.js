@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import Registration from '@/components/Login/Registration'
 function page() {

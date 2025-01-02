@@ -1,3 +1,4 @@
+'use client'
 import WarrantMapping from '@/components/judge/mapped_warrent';
 import CreateFir from '@/components/police/create_fir';
 import FirMapping from '@/components/police/map_fir';

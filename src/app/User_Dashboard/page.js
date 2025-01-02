@@ -1,4 +1,4 @@
-
+'use client'
 import ShowWarrant from '@/components/user/showwarrent';
 import ShowFir from '@/components/user/showfir';
 import RequestBail from '@/components/user/requestBail';
