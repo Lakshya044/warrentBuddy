@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-function Registration() {
+function page() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -38,7 +38,7 @@ function Registration() {
       });
 
       if (response.ok) {
-        router.push("/ClientLogin"); // Redirect to a success page
+        router.push("/Login"); 
       } else {
         alert("Registration failed!");
       }
@@ -161,4 +161,4 @@ function Registration() {
   );
 }
 
-export default Registration;
+export default page;

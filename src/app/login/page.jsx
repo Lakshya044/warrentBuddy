@@ -1,9 +1,9 @@
-"use client";
-
-import { useState } from "react";
+'use client'
+import React from 'react'
+import { useState } from 'react';
 import { useRouter } from "next/navigation";
 
-function ClientLogin() {
+function page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -20,7 +20,7 @@ function ClientLogin() {
     event.preventDefault();
 
     // Send login request to server
-    const response = await fetch("/api/auth/login/client", {
+    const response = await fetch("/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,10 +32,33 @@ function ClientLogin() {
     });
 
     const res = await response.json();
-console.log("res",res);
+
     if (response.ok) {
-      // Navigate to client dashboard or home page
-      router.push("/User_Dashboard");
+      const userRole = res?.role;
+      let dashboardPath;
+
+      switch (userRole) {
+        case 1:
+          dashboardPath = "/User_Dashboard";
+          break;
+        case 2: // LAWYER
+          dashboardPath = "/Lawyer_Dashboard";
+          break;
+        case 3: // POLICE
+          dashboardPath = "/Police_Dashboard";
+          break;
+        case 4: // JUDGE
+          dashboardPath = "/Admin_Dashboard";
+          break;
+        case 5: // SUPERUSER
+          dashboardPath = "/Superuser_Dashboard";
+          break;
+        default:
+          alert("Unknown role. Please try again.");
+          return;
+      }
+
+      router.push(dashboardPath);
     } else {
       alert("Invalid credentials. Please try again.");
     }
@@ -44,7 +67,7 @@ console.log("res",res);
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-6 text-center">Client Login</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700 mb-2">
@@ -59,6 +82,7 @@ console.log("res",res);
               required
             />
           </div>
+
           <div className="mb-4">
             <label htmlFor="password" className="block text-gray-700 mb-2">
               Password
@@ -72,6 +96,7 @@ console.log("res",res);
               required
             />
           </div>
+
           <div className="flex justify-center">
             <button
               type="submit"
@@ -86,4 +111,4 @@ console.log("res",res);
   );
 }
 
-export default ClientLogin;
+export default page
