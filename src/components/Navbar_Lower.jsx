@@ -3,11 +3,9 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import RoleSelectModal from "./RoleSelectModel";
 
 function LowerNavbar() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // New state for login status
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State for login status
   const router = useRouter();
 
   useEffect(() => {
@@ -21,7 +19,7 @@ function LowerNavbar() {
   };
 
   const handleLoginClick = () => {
-    setIsModalOpen(true);
+    router.push("/login"); // Assuming there's a general login page
   };
 
   const handleLogoutClick = () => {
@@ -29,23 +27,6 @@ function LowerNavbar() {
     localStorage.setItem("isLoggedIn", "false");
     setIsLoggedIn(false);
     router.push("/");
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleSelectRole = (role) => {
-    setIsModalOpen(false);
-    if (role === 1) {
-      localStorage.setItem("isLoggedIn", "true"); // Mock login action
-      setIsLoggedIn(true);
-      router.push("/ClientLogin");
-    } else {
-      localStorage.setItem("isLoggedIn", "true"); // Mock login action
-      setIsLoggedIn(true);
-      router.push("/AdminLogin");
-    }
   };
 
   return (
@@ -96,9 +77,6 @@ function LowerNavbar() {
           )}
         </div>
       </nav>
-      {isModalOpen && (
-        <RoleSelectModal onClose={handleCloseModal} onSelectRole={handleSelectRole} />
-      )}
     </>
   );
 }

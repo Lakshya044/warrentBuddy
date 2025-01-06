@@ -13,7 +13,7 @@ function Registration() {
     city: "",
     pincode: "",
     phonenumber: "",
-    role: 4,
+    role: 1,
   });
 
   const router = useRouter();
