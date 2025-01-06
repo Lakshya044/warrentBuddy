@@ -1,12 +1,12 @@
-// src/app/api/auth/logout/route.js
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
-export async function POST(req) {
-    const response = NextResponse.json({ message: 'Logged out successfully' });
+export async function POST() {
+  const response = NextResponse.json({ message: "Logged out successfully" });
 
-    // Clear the token cookie
-    response.cookies.delete('token');
-    response.cookies.delete('email');
-    response.cookies.delete('role');
-    return response;
+  response.cookies.set("token", "", { path: "/", expires: new Date(0) });
+  response.cookies.set("name", "", { path: "/", expires: new Date(0) });
+  response.cookies.set("email", "", { path: "/", expires: new Date(0) });
+  response.cookies.set("role", "", { path: "/", expires: new Date(0) });
+
+  return response;
 }

@@ -32,11 +32,11 @@ function page() {
     });
 
     const res = await response.json();
-
+    console.log("Response recieved from the login route" , res) 
     if (response.ok) {
-      const userRole = res?.role;
+      const userRole = res?.user.role;
       let dashboardPath;
-
+      console.log("Userrolel recieved is" , userRole) ;
       switch (userRole) {
         case 1:
           dashboardPath = "/User_Dashboard";

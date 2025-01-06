@@ -3,6 +3,7 @@ import './globals.css';
 import Footer from '@/components/Footer';
 import LowerNavbar from '@/components/Navbar_Lower';
 import UpperNavbar from '@/components/Nabar';
+import Navbar from '@/components/Nabar';
 // Import the Inter font with Latin subset
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,8 +18,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <UpperNavbar/>
-        <LowerNavbar/>
+        <Navbar/>
         {children}
         <Footer/>
       </body>
