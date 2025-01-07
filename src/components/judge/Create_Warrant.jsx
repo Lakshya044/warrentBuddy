@@ -1,9 +1,8 @@
 'use client';
 import { useState } from 'react';
 
-export default function CreateWarrant({  }) {
+export default function CreateWarrant() {
   const [formData, setFormData] = useState({
-    warrantNo: '',
     warrantType: '',
     accusedName: '',
     aadharNo: '',
@@ -21,8 +20,9 @@ export default function CreateWarrant({  }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { warrantNo, warrantType, accusedName, aadharNo, details, pincode, policeStationId, address } = formData;
-    if (!warrantNo || !warrantType || !accusedName || !aadharNo || !details || !pincode || !policeStationId || !address) {
+    const { warrantType, accusedName, aadharNo, details, pincode, policeStationId, address } = formData;
+
+    if (!warrantType || !accusedName || !aadharNo || !details || !pincode || !policeStationId || !address) {
       setError('All fields are required.');
       return;
     }
@@ -39,7 +39,6 @@ export default function CreateWarrant({  }) {
       if (response.ok) {
         alert('Warrant created successfully!');
         setFormData({
-          warrantNo: '',
           warrantType: '',
           accusedName: '',
           aadharNo: '',
@@ -59,10 +58,6 @@ export default function CreateWarrant({  }) {
     }
   };
 
-  // if (userRole !== 0) {
-  //   return <div className="text-center">You do not have permission to access this page.</div>;
-  // }
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center py-4 sm:px-2 lg:px-4">
       <div className="max-w-md w-full space-y-5">
@@ -79,8 +74,7 @@ export default function CreateWarrant({  }) {
         )}
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-3">
-            {[
-              { id: 'warrantNo', label: 'Warrant Number' },
+            {[ 
               { id: 'warrantType', label: 'Warrant Type' },
               { id: 'accusedName', label: 'Accused Name' },
               { id: 'aadharNo', label: 'Aadhar Number' },

@@ -22,7 +22,7 @@ const bailSchema = new mongoose.Schema({
         required: true
     },
     policeStationId: {
-        type: String, // Ensure this is String
+        type: String, 
         required: [true, 'Police station ID is required']
     },
     status: {

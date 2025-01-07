@@ -36,7 +36,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';  
 import WarrantMapping from '@/components/judge/mapped_warrent';  
-import CreateWarrant from '@/components/judge/create_warrent';  
+import CreateWarrant from '@/components/judge/Create_Warrant';  
 import BailMapping from '@/components/judge/mapped_bail';  
 import ApproveBail from '@/components/judge/approve_bail';  
 import Unauthorized from '@/components/unauthorized';  // Unauthorized access component
@@ -47,7 +47,7 @@ export default function JudgeDashboard() {
 
   useEffect(() => {
     const userRole = localStorage.getItem('role');  // Get the user's role from localStorage
-    if (userRole === '2') {  // Role '3' corresponds to Judge
+    if (userRole === '4') {  // Role '3' corresponds to Judge
       setIsAuthorized(true);  // Authorized if the role is '3'
     } else {
       setIsAuthorized(false);  // Unauthorized otherwise

@@ -1,7 +1,7 @@
 
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbconnect';
-import { Warrant,UserWarrant } from '@/model/user/warrantModel'; 
+// import { Warrant,UserWarrant } from '@/model/user/warrantModel'; 
 import { FIR } from '@/model/user/warrantModel'; 
 import { Bail } from '@/model/user/bailModel';
 import { authenticate, checkRole } from '@/middleware/authMiddleware';
@@ -10,19 +10,60 @@ import { authenticate, checkRole } from '@/middleware/authMiddleware';
 const handleUnauthorized = () => {
     return NextResponse.json({ message: 'Unauthorized. You do not have permission to perform this action.' }, { status: 403 });
 };
+import { Warrant } from "@/model/user/warrantModel";
+const createWarrant = async (body) => {
+    const { warrantType, accusedName, aadharNo, details, pincode, policeStationId, address} = body;
 
-// Function to process warrant requests
-const processWarrantRequest = async (body) => {
-    const { warrantNo, warrantType, accusedName, aadharNo, details, pincode, policeStationId, address } = body;
-
-    if (!warrantNo || !warrantType || !accusedName || !aadharNo || !details || !pincode || !policeStationId || !address) {
+    if (!warrantType || !accusedName || !aadharNo || !details || !pincode || !policeStationId || !address) {
         return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
     }
 
-    const newWarrant = new Warrant({ warrantNo, warrantType, accusedName, aadharNo, details, pincode, policeStationId, address });
-    await newWarrant.save();
-    return NextResponse.json({ message: 'Warrant issued successfully', warrantId: newWarrant._id }, { status: 201 });
+    if (!['Arrest Warrant', 'Search Warrant'].includes(warrantType)) {
+        return NextResponse.json({ message: 'Invalid warrant type' }, { status: 400 });
+    }
+
+    let lastWarrant = await Warrant.findOne().sort({ warrantNo: -1 }); 
+    let nextWarrantNo = lastWarrant ? (parseInt(lastWarrant.warrantNo) + 1).toString() : '1001'; 
+
+    const newWarrant = new Warrant({
+        warrantNo: nextWarrantNo,
+        warrantType,
+        accusedName,
+        aadharNo,
+        details,
+        pincode,
+        policeStationId,
+        address,
+        status: 'Pending', 
+    });
+
+    try {
+        await newWarrant.save();
+        console.log("Warrant has been issued Successfully") ;
+        return NextResponse.json({ 
+            message: 'Warrant issued successfully', 
+            warrantId: newWarrant._id 
+        },{ 
+            status: 201 
+        });
+    } catch (error) {
+        console.error('Error creating warrant:', error);
+        return NextResponse.json({ message: 'Error processing the warrant request' }, { status: 500 });
+    }
 };
+
+// Function to process warrant requests
+// const processWarrantRequest = async (body) => {
+//     const { warrantNo, warrantType, accusedName, aadharNo, details, pincode, policeStationId, address } = body;
+
+//     if (!warrantNo || !warrantType || !accusedName || !aadharNo || !details || !pincode || !policeStationId || !address) {
+//         return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
+//     }
+
+//     const newWarrant = new Warrant({ warrantNo, warrantType, accusedName, aadharNo, details, pincode, policeStationId, address });
+//     await newWarrant.save();
+//     return NextResponse.json({ message: 'Warrant issued successfully', warrantId: newWarrant._id }, { status: 201 });
+// };
 
 // Function to process FIR requests
 const processFIRRequest = async (body) => {
@@ -89,9 +130,9 @@ async function handlePOST(req) {
         const url = new URL(req.url);
         const type = url.pathname.split('/')[3];
         const body = await req.json();
-
+        console.log("Type of request is " , type) ;
         if (type === 'warrant') {
-            return await processWarrantRequest(body);
+            return await createWarrant(body);
 
         } else if (type === 'FIR') {
             return await processFIRRequest(body);

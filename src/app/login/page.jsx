@@ -40,11 +40,11 @@ function Page() {
       localStorage.setItem("role", role);
 
       const dashboardRoutes = {
-        1: "/User_Dashboard",        // CITIZEN
-        2: "/Lawyer_Dashboard",     // LAWYER
-        3: "/Police_Dashboard",     // POLICE
-        4: "/Admin_Dashboard",      // JUDGE
-        5: "/Superuser_Dashboard",  // SUPERUSER
+        1: "/Dashboards/Citizen_Dashboard",     // CITIZEN
+        2: "/Dashboards/Lawyer_Dashboard",     // LAWYER
+        3: "/Dashboards/Police_Dashboard",     // POLICE
+        4: "/Dashboards/Judge_Dashboard",      // JUDGE
+        5: "/Dashboards/Superuser_Dashboard",  // SUPERUSER
       };
 
       router.push(dashboardRoutes[role] || "/");

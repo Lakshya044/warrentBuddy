@@ -1,7 +1,6 @@
 import dbConnect from '@/lib/dbconnect';
 import { Warrant, FIR,UserWarrant } from '@/model/user/warrantModel'; 
-import { Bail } from '@/model/user/bailModel'; // Adjust path as needed
-
+import { Bail } from '@/model/user/bailModel';
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
@@ -11,9 +10,7 @@ export async function POST(req) {
         console.log("Database connected successfully");
 
         const url = new URL(req.url, `http://${req.headers.host}`);
-        const type = url.pathname.split('/')[3]; // Extract type from pathname
-
-        // Parse request body
+        const type = url.pathname.split('/')[3]; 
         const body = await req.json();
         const { aadharNo, policeStationId } = body;
 
