@@ -31,12 +31,21 @@ function page() {
       }),
     });
 
-    const res = await response.json();
-    console.log("Response recieved from the login route" , res) 
+    // const res = await response.json();
+    // console.log("Response recieved from the login route" , res) 
+    
+    // localStorage.setItem('name', res.name);
+    // localStorage.setItem('role', res.role);
+    // console.log("local",localStorage);
     if (response.ok) {
-      const userRole = res?.user.role;
+      const res = await response.json();
+      console.log("Response received from the login route:", res);
+      localStorage.setItem('name', res.user.name);
+    localStorage.setItem('role', res.user.role);
+    console.log("localStorage:", localStorage);
+    const userRole = res.user.role;
       let dashboardPath;
-      console.log("Userrolel recieved is" , userRole) ;
+      console.log("Userrole  recieved is" , userRole) ;
       switch (userRole) {
         case 1:
           dashboardPath = "/User_Dashboard";

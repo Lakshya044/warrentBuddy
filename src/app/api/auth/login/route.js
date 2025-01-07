@@ -3,7 +3,7 @@ import dbConnect from "@/lib/dbconnect";
 import User from "@/model/user/user_model";
 import { generateToken } from "@/lib/auth";
 import { NextResponse } from "next/server";
-
+import { setTokenCookie } from '@/lib/cookies';
 export async function POST(req) {
   try {
     await dbConnect();
@@ -26,9 +26,10 @@ export async function POST(req) {
       { status: 200 }
     );
 
-    response.cookies.set("token", token, { path: "/", httpOnly: true });
-    response.cookies.set("name", user.name, { path: "/" });
-
+    // response.cookies.set("token", token, { path: "/", httpOnly: true });
+    // response.cookies.set("name", user.name, { path: "/" });
+    
+    setTokenCookie(response, user);
     return response;
   } catch (error) {
     return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
