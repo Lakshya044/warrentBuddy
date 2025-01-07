@@ -12,6 +12,7 @@ export default function CreateWarrant() {
     address: '',
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,23 +20,25 @@ export default function CreateWarrant() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const { warrantType, accusedName, aadharNo, details, pincode, policeStationId, address } = formData;
 
     if (!warrantType || !accusedName || !aadharNo || !details || !pincode || !policeStationId || !address) {
       setError('All fields are required.');
+      setLoading(false);
       return;
     }
 
     try {
-      const response = await fetch('/api/create/warrant', {
+      const response = await fetch('/api/create/create_warrant', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
-      console.log("response",response);
+
       if (response.ok) {
         alert('Warrant created successfully!');
         setFormData({
@@ -47,7 +50,7 @@ export default function CreateWarrant() {
           policeStationId: '',
           address: '',
         });
-        setError(''); // Clear any existing error messages
+        setError('');
       } else {
         const data = await response.json();
         setError(data.message || 'Something went wrong.');
@@ -55,59 +58,162 @@ export default function CreateWarrant() {
     } catch (err) {
       console.error('Error creating warrant:', err);
       setError('Server error, please try again later.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center py-4 sm:px-2 lg:px-4">
-      <div className="max-w-md w-full space-y-5">
-        <div>
-          <h2 className="mt-1 text-center text-3xl font-extrabold text-gray-900">
-            Create a Warrant
+    <div
+      className="flex justify-between items-center min-h-screen"
+      style={{
+        background:
+          "radial-gradient(circle,rgba(253, 248, 225, 1) 5%, rgba(109, 76, 65, 1) 81%)",
+      }}
+    >
+      <div className="w-6/10 flex justify-center mx-20">
+        <div className="bg-white p-8 rounded-lg shadow-lg w-[580px]">
+          <h2 className="text-2xl font-extrabold mb-6 text-center text-[#6D4C41]">
+            Create Warrant
           </h2>
-        </div>
-        {/* Display error if it exists */}
-        {error && (
-          <div className="bg-red-100 text-red-700 border border-red-300 rounded p-4 mb-4">
-            {error}
-          </div>
-        )}
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm space-y-3">
-            {[ 
-              { id: 'warrantType', label: 'Warrant Type' },
-              { id: 'accusedName', label: 'Accused Name' },
-              { id: 'aadharNo', label: 'Aadhar Number' },
-              { id: 'details', label: 'Details' },
-              { id: 'pincode', label: 'Pincode' },
-              { id: 'policeStationId', label: 'Police Station ID' },
-              { id: 'address', label: 'Address' },
-            ].map(({ id, label }) => (
-              <div key={id}>
-                <label htmlFor={id} className="block text-sm font-medium text-gray-700">{label}</label>
-                <input
-                  id={id}
-                  name={id}
-                  type="text"
-                  required
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  placeholder={label}
-                  value={formData[id]}
+          {error && (
+            <div className="bg-red-100 text-red-700 border border-red-300 rounded p-4 mb-4">
+              {error}
+            </div>
+          )}
+          <form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div>
+                <label htmlFor="warrantType" className="block text-[#6D4C41] mb-2">
+                  Warrant Type
+                </label>
+                <select
+                  id="warrantType"
+                  name="warrantType"
+                  value={formData.warrantType}
                   onChange={handleChange}
+                  className="w-full p-3 border border-[#6D4C41] rounded-md"
+                  required
+                >
+                  <option value="">Select Warrant Type</option>
+                  <option value="Search Warrant">Search Warrant</option>
+                  <option value="Arrest Warrant">Arrest Warrant</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="accusedName" className="block text-[#6D4C41] mb-2">
+                  Accused Name
+                </label>
+                <input
+                  type="text"
+                  id="accusedName"
+                  name="accusedName"
+                  value={formData.accusedName}
+                  onChange={handleChange}
+                  className="w-full p-3 border border-[#6D4C41] rounded-md"
+                  required
                 />
               </div>
-            ))}
-          </div>
+            </div>
 
-          <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Create Warrant
-            </button>
-          </div>
-        </form>
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div>
+                <label htmlFor="aadharNo" className="block text-[#6D4C41] mb-2">
+                  Aadhar Number
+                </label>
+                <input
+                  type="text"
+                  id="aadharNo"
+                  name="aadharNo"
+                  value={formData.aadharNo}
+                  onChange={handleChange}
+                  className="w-full p-3 border border-[#6D4C41] rounded-md"
+                  required
+                />
+              </div>
+              <div>
+              <label htmlFor="address" className="block text-[#6D4C41] mb-2">
+                  Address
+                </label>
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  className="w-full p-3 border border-[#6D4C41] rounded-md"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div>
+                <label htmlFor="pincode" className="block text-[#6D4C41] mb-2">
+                  Pincode
+                </label>
+                <input
+                  type="text"
+                  id="pincode"
+                  name="pincode"
+                  value={formData.pincode}
+                  onChange={handleChange}
+                  className="w-full p-3 border border-[#6D4C41] rounded-md"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="policeStationId" className="block text-[#6D4C41] mb-2">
+                  Police Station ID
+                </label>
+                <input
+                  type="text"
+                  id="policeStationId"
+                  name="policeStationId"
+                  value={formData.policeStationId}
+                  onChange={handleChange}
+                  className="w-full p-3 border border-[#6D4C41] rounded-md"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 mb-6">
+              <div>
+                <label htmlFor="details" className="block text-[#6D4C41] mb-2">
+                  Details
+                </label>
+                <input
+                  type="text"
+                  id="details"
+                  name="details"
+                  value={formData.details}
+                  onChange={handleChange}
+                  className="w-full p-3 border border-[#6D4C41] rounded-md"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                className="w-full bg-[#6D4C41] text-white p-3 rounded-md hover:bg-[#5A3A35] font-bold"
+                disabled={loading}
+              >
+                {loading ? "Creating Warrant..." : "Create Warrant"}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div className="w-4/10 flex justify-center mx-20">
+        <img
+          src="/WarrantBuddy.png"
+          alt="Warrant Buddy"
+          className="w-[450px] object-cover rounded-xl shadow-md"
+        />
       </div>
     </div>
   );

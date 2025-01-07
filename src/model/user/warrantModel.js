@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 const WarrantSchema = new mongoose.Schema({
   warrantNo: {
     type: String,
@@ -74,7 +75,8 @@ const counterSchema = new mongoose.Schema({
 });
 
 const Counter = mongoose.models.Counter || mongoose.model('Counter', counterSchema);
-// moduleexports = Counter;
 
+// Export the Warrant model, ensuring it is only compiled once
+const Warrant = mongoose.models.Warrant || mongoose.model('Warrant', WarrantSchema);
 
-export const Warrant = mongoose.models.Warrant || mongoose.model('WarrantSchema', WarrantSchema);
+export { Warrant, Counter };

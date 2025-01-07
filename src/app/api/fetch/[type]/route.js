@@ -1,5 +1,5 @@
 import dbConnect from '@/lib/dbconnect';
-import { Warrant, FIR,UserWarrant } from '@/model/user/warrantModel'; 
+import { Warrant, FIR } from '@/model/user/warrantModel'; 
 import { Bail } from '@/model/user/bailModel';
 import { NextResponse } from 'next/server';
 

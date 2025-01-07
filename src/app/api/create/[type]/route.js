@@ -1,7 +1,6 @@
 
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbconnect';
-// import { Warrant,UserWarrant } from '@/model/user/warrantModel'; 
 import { FIR } from '@/model/user/firModel'; 
 import { Bail } from '@/model/user/bailModel';
 import { authenticate, checkRole } from '@/middleware/authMiddleware';
@@ -11,6 +10,7 @@ const handleUnauthorized = () => {
     return NextResponse.json({ message: 'Unauthorized. You do not have permission to perform this action.' }, { status: 403 });
 };
 
+// CREATE WARRANT
 const createWarrant = async (body) => {
     const { warrantType, accusedName, aadharNo, details, pincode, policeStationId, address} = body;
 
@@ -52,18 +52,37 @@ const createWarrant = async (body) => {
     }
 };
 
-// Function to process warrant requests
-// const processWarrantRequest = async (body) => {
-//     const { warrantNo, warrantType, accusedName, aadharNo, details, pincode, policeStationId, address } = body;
-
-//     if (!warrantNo || !warrantType || !accusedName || !aadharNo || !details || !pincode || !policeStationId || !address) {
-//         return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
-//     }
-
-//     const newWarrant = new Warrant({ warrantNo, warrantType, accusedName, aadharNo, details, pincode, policeStationId, address });
-//     await newWarrant.save();
-//     return NextResponse.json({ message: 'Warrant issued successfully', warrantId: newWarrant._id }, { status: 201 });
-// };
+// UPDATE WARRANT TO USER
+const updateWarrantVisibility = async (req, res) => {
+    const { aadharNo, visibleToUser } = req.body;
+  
+    // Validate input
+    if (!aadharNo || visibleToUser === undefined) {
+      return res.status(400).json({ message: 'Both aadharNo and visibleToUser are required.' });
+    }
+  
+    try {
+      // Find the warrant using the aadharNo
+      const updatedWarrant = await Warrant.findOneAndUpdate(
+        { aadharNo: aadharNo }, // Match using aadharNo
+        { visibleToUser: visibleToUser }, // Update visibleToUser status
+        { new: true } // Return the updated document
+      );
+  
+      if (!updatedWarrant) {
+        return res.status(404).json({ message: 'Warrant not found with the given Aadhar number.' });
+      }
+  
+      return res.status(200).json({
+        message: 'Warrant visibility updated successfully.',
+        updatedWarrant: updatedWarrant,
+      });
+    } catch (error) {
+      console.error('Error updating warrant visibility:', error);
+      return res.status(500).json({ message: 'Server error, please try again later.' });
+    }
+  };
+  
 
 // Function to process FIR requests
 const processFIRRequest = async (body) => {
@@ -131,9 +150,11 @@ async function handlePOST(req) {
         const type = url.pathname.split('/')[3];
         const body = await req.json();
         console.log("Type of request is " , type) ;
-        if (type === 'warrant') {
+        if (type === 'create_warrant') {
             return await createWarrant(body);
 
+        }else if(type ==='relese_warrant_to_citizen'){
+            return await updateWarrantVisibility(body) ;
         } else if (type === 'FIR') {
             return await processFIRRequest(body);
 
@@ -159,9 +180,9 @@ async function handlePOST(req) {
 export const POST = authenticate((req, res, next) => {
     const url = new URL(req.url);
     const type = url.pathname.split('/')[3];
-  console.log("hiii it is")
-    if (type === 'warrant' || type === 'bailapprove') {
-        return checkRole(4)(handlePOST)(req, res, next); // Role 1 for warrant and bail approval
+  console.log("hiii it is handler function for role checks")
+    if (type === 'create_warrant' || type === 'bailapprove') {
+        return checkRole(4)(handlePOST)(req, res, next); 
     } else if (type === 'FIR' || type === 'userwarrant') {
         return checkRole(2)(handlePOST)(req, res, next); // Role 2 for FIR and user warrant
     // } else if (type === 'requestbail') {

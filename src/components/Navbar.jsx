@@ -11,7 +11,7 @@ function Navbar() {
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
-      if (runCount >= 100) {
+      if (runCount >= 500) {
         clearInterval(intervalId); // Stop the interval once runCount hits 50
         return;
       }

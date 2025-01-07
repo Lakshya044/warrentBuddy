@@ -35,7 +35,7 @@
 'use client'
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';  
-import WarrantMapping from '@/components/judge/mapped_warrent';  
+import WarrantMapping from '@/components/judge/Fetch_Issued_Warrants';  
 import CreateWarrant from '@/components/judge/Create_Warrant';  
 import BailMapping from '@/components/judge/mapped_bail';  
 import ApproveBail from '@/components/judge/approve_bail';  
