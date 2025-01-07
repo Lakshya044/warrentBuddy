@@ -12,6 +12,8 @@ console.log(token);
     // Set the token cookie
     response.cookies.set('token', token, { httpOnly: true, maxAge: 3600 });
     
+    response.cookies.set('name', user.name, { httpOnly: true, maxAge: 3600 });
+    
     // Optionally set role and email separately if needed
     response.cookies.set('role', user.role, { httpOnly: true, maxAge: 3600 });
     response.cookies.set('email', user.email, { httpOnly: true, maxAge: 3600 });
