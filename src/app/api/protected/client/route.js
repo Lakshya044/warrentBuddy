@@ -6,4 +6,4 @@ const handler = async (req) => {
     return NextResponse.json({ message: 'Client access granted', user: req.user });
 };
 
-export const GET = authenticate(checkRole(4)(handler)); // Only accessible by users with role 4 (Client)
+export const GET = authenticate(checkRole(4)(handler)); 
