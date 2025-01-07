@@ -53,7 +53,7 @@ export default function PoliceDashboard() {
 
   useEffect(() => {
     const userRole = localStorage.getItem('role'); // Get role from localStorage
-    if (userRole === '2') {
+    if (userRole === '3') {
       setIsAuthorized(true);  // Authorized if role is '2'
     } else {
       setIsAuthorized(false); // Not authorized otherwise

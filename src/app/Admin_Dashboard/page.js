@@ -47,7 +47,7 @@ export default function JudgeDashboard() {
 
   useEffect(() => {
     const userRole = localStorage.getItem('role');  // Get the user's role from localStorage
-    if (userRole === '3') {  // Role '3' corresponds to Judge
+    if (userRole === '2') {  // Role '3' corresponds to Judge
       setIsAuthorized(true);  // Authorized if the role is '3'
     } else {
       setIsAuthorized(false);  // Unauthorized otherwise
