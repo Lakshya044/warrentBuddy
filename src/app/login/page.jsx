@@ -64,6 +64,16 @@ function Page() {
       "radial-gradient(circle,rgba(253, 248, 225, 1)  5%, rgba(109, 76, 65, 1) 81%)",
   }}
 >
+
+      <div className="w-1/2 flex justify-center">
+        <img
+          src="/WarrantBuddy.png" // Replace with your image path
+          alt="Login Image"
+
+          className="w-[450px] object-cover rounded-xl shadow-md"
+        />
+      </div>
+
       <div className="w-1/2 flex justify-center">
         <div className="bg-white p-8 rounded-lg shadow-lg w-[380px] h-[450px]">
           <h2 className="text-2xl font-extrabold mb-6 text-center text-[#6D4C41]">Login</h2>
@@ -117,14 +127,7 @@ function Page() {
         </div>
       </div>
 
-      <div className="w-1/2 flex justify-center">
-        <img
-          src="/WarrantBuddy.png" // Replace with your image path
-          alt="Login Image"
-
-          className="w-[450px] object-cover rounded-xl shadow-md"
-        />
-      </div>
+      
     </div>
   );
 }

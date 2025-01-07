@@ -12,7 +12,7 @@ export async function POST(req, res) {
     }
 
     const { name, email, password, country, address, city, pincode, phonenumber } = await req.json();
-
+    console.log("Response at register route" , req) 
     // Check if all required fields are present
     if (!name || !email || !password || !country || !address || !city || !pincode || !phonenumber) {
         return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
