@@ -1,160 +1,47 @@
-"use client";
-
-// import React, { useState, useEffect } from "react";
-// import { useRouter } from "next/navigation";
-// import Image from "next/image";
-
-// function Navbar() {
-//   const [isLoggedIn, setIsLoggedIn] = useState(false);
-//   const [username, setUsername] = useState("");
-//   const router = useRouter();
-
-//   const getCookie = (cookieName) => {
-//     const cookies = document.cookie.split("; ");
-//     for (let i = 0; i < cookies.length; i++) {
-//       const [name, value] = cookies[i].split("=");
-//       if (name === cookieName) {
-//         return decodeURIComponent(value);
-//       }
-//     }
-//     return null;
-//   };
-
-//   useEffect(() => {
-//     let counter = 0; // Initialize counter
-
-//     const checkLoginStatus = () => {
-//       const token = getCookie("token");
-//       const storedUsername = getCookie("name");
-
-//       console.log("Token consoled at Navbar", token);
-//       console.log("Username consoled at Navbar", storedUsername);
-
-//       if (storedUsername) {
-//         setIsLoggedIn(true);
-//         setUsername(storedUsername);
-//       } else {
-//         setIsLoggedIn(false);
-//         setUsername("");
-//       }
-
-//       counter++; // Increment counter
-//       if (counter >= 400) {
-//         clearInterval(intervalId);
-//       }
-//     };
-
-//     checkLoginStatus();
-//     const intervalId = setInterval(checkLoginStatus, 500);
-
-//     return () => clearInterval(intervalId);
-//   }, []);
-
-
-//   const handleSignUpClick = () => {
-//     router.push("/signup");
-//   };
-
-//   const handleLoginClick = () => {
-//     router.push("/login");
-//   };
-
-//   const handleLogoutClick = async () => {
-//     try {
-//       const res = await fetch("/api/auth/logout", { method: "POST" });
-
-//       if (res.ok) {
-//         // Clear cookies manually
-//         document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-//         document.cookie = "name=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-
-//         setIsLoggedIn(false);
-//         setUsername("");
-//         router.push("/"); // Redirect to home page
-//       } else {
-//         console.error("Logout failed");
-//       }
-//     } catch (error) {
-//       console.error("Error during logout:", error);
-//     }
-//   };
-
-//   return (
-//     <nav className="flex justify-between items-center p-2 bg-gray-100 border-b border-gray-200">
-//       <div className="flex items-center">
-//         <Image
-//           src="/tiranga.jpg"
-//           width={60}
-//           height={60}
-//           alt="Preamble"
-//           className="inline-block align-top rounded-full"
-//         />
-//         <div className="ml-2 text-blue-700 font-semibold text-xl">
-//           <span>GOVERNMENT OF INDIA</span>
-//         </div>
-//       </div>
-//       <div className="flex items-center">
-//         {isLoggedIn ? (
-//           <div className="flex items-center space-x-4">
-//             <span className="text-sm text-gray-800">Welcome, {username}</span>
-//             <button
-//               className="px-4 py-2 text-sm bg-red-500 text-white rounded-md hover:bg-red-600"
-//               onClick={handleLogoutClick}
-//             >
-//               LOG OUT
-//             </button>
-//           </div>
-//         ) : (
-//           <div className="space-x-4">
-//             <button
-//               className="px-4 py-2 text-sm border border-gray-400 rounded-md bg-white text-gray-700 hover:bg-gray-200"
-//               onClick={handleSignUpClick}
-//             >
-//               SIGN UP
-//             </button>
-//             <button
-//               className="px-4 py-2 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600"
-//               onClick={handleLoginClick}
-//             >
-//               SIGN IN
-//             </button>
-//           </div>
-//         )}
-//       </div>
-//     </nav>
-//   );
-// }
-
-// export default Navbar;
-
+'use client'
 import { useState, useEffect } from 'react';
 import { useRouter } from "next/navigation";
+import Image from 'next/image';
 
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const router = useRouter();
+  const [runCount, setRunCount] = useState(0);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch('/api/cookies');
-      const data = await response.json();
-
-      console.log('Token:', data.token);
-      console.log('Name:', data.name);
-      console.log('Role:', data.role);
-
-      if (data.token && data.name) {
-        setIsLoggedIn(true);
-        setUsername(data.name);
-      } else {
-        setIsLoggedIn(false);
-        setUsername("");
+    const intervalId = setInterval(async () => {
+      if (runCount >= 100) {
+        clearInterval(intervalId); // Stop the interval once runCount hits 50
+        return;
       }
-    };
 
-    fetchData();
-  }, []);
+      try {
+        const response = await fetch('/api/cookies');
+        const data = await response.json();
+
+        // console.log(`Iteration ${runCount + 1}`);
+        // console.log('Token:', data.token);
+        // console.log('Name:', data.name);
+        // console.log('Role:', data.role);
+
+        if (data.token && data.name) {
+          setIsLoggedIn(true);
+          setUsername(data.name);
+        } else {
+          setIsLoggedIn(false);
+          setUsername("");
+        }
+
+        setRunCount((prevCount) => prevCount + 1); 
+      } catch (error) {
+        console.error(`Error in iteration ${runCount + 1}:`, error);
+      }
+    }, 500); // Run every 500ms
+
+    return () => clearInterval(intervalId); 
+  }, [runCount]);
+  
 
   const handleLogoutClick = async () => {
     const res = await fetch("/api/auth/logout", { method: "POST" });
@@ -171,41 +58,59 @@ function Navbar() {
   };
 
   return (
-    <nav className="flex justify-between items-center p-2 bg-gray-100 border-b border-gray-200">
-      <div className="flex items-center">
-        <span className="text-blue-700 font-semibold text-xl">
-          GOVERNMENT OF INDIA
-        </span>
+    <nav className="relative flex items-center p-1 border-b border-gray-200 bg-[#FDF8E1]">
+  {/* Left Section */}
+  <div className="flex items-center">
+    <span className="m-2">
+      <Image
+        src="/WarrantBuddy.png"
+        className="rounded-2xl border-2 border-[#3E2723]"
+        alt="My Image"
+        width={70}
+        height={70}
+      />
+    </span>
+    <span className="text-[#6c3929] flex flex-col items-center mx-4">
+      <div className="text-4xl font-extrabold text-[#6D4C41] drop-shadow-[2px_2px_0px_#3E2723] bg-clip-text text-transparent bg-gradient-to-r from-[#8B5A2B] via-[#6D4C41] to-[#3E2723]">Warrant Buddy</div>
+      <div className="text-m font-bold ml-[-15px]">Legal Document Management</div>
+    </span>
+  </div>
+
+  {/* Center Section */}
+  {isLoggedIn && (
+    <div className="absolute left-1/2 transform -translate-x-1/2 text-2xl font-extrabold text-[#6D4C41] ">
+      Welcome, {username}
+    </div>
+  )}
+
+  {/* Right Section */}
+  <div className="flex ml-auto">
+    {isLoggedIn ? (
+      <button
+        className="px-4 py-2 text-sm font-bold bg-[#6D4C41] text-[#FDF8E1] rounded-md hover:bg-[#5A3A35]"
+        onClick={handleLogoutClick}
+      >
+        LOG OUT
+      </button>
+    ) : (
+      <div className="space-x-4">
+        <button
+          className="px-4 py-2 text-sm border border-[#3E2723] rounded-md font-bold bg-[#FFB300] text-[#3E2723] hover:bg-[#E6A000]"
+          onClick={() => router.push("/signup")}
+        >
+          SIGN UP
+        </button>
+        <button
+          className="px-4 py-2 text-sm bg-[#FFB300] border-[#3E2723] text-[#3E2723] font-bold rounded-md hover:bg-[#E6A000]"
+          onClick={() => router.push("/login")}
+        >
+          SIGN IN
+        </button>
       </div>
-      <div className="flex items-center">
-        {isLoggedIn ? (
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-800">Welcome, {username}</span>
-            <button
-              className="px-4 py-2 text-sm bg-red-500 text-white rounded-md hover:bg-red-600"
-              onClick={handleLogoutClick}
-            >
-              LOG OUT
-            </button>
-          </div>
-        ) : (
-          <div className="space-x-4">
-            <button
-              className="px-4 py-2 text-sm border border-gray-400 rounded-md bg-white text-gray-700 hover:bg-gray-200"
-              onClick={() => router.push("/signup")}
-            >
-              SIGN UP
-            </button>
-            <button
-              className="px-4 py-2 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600"
-              onClick={() => router.push("/login")}
-            >
-              SIGN IN
-            </button>
-          </div>
-        )}
-      </div>
-    </nav>
+    )}
+  </div>
+</nav>
+
   );
 }
 

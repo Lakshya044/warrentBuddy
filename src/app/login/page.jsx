@@ -1,123 +1,132 @@
-'use client'
-import React from 'react'
-import { useState } from 'react';
-import { useRouter } from "next/navigation";
+'use client';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-function page() {
+function Page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
-
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
+  const [showPassword, setShowPassword] = useState(false);
+  
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
 
-    // Send login request to server
-    const response = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    });
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    // const res = await response.json();
-    // console.log("Response recieved from the login route" , res) 
-    
-    // localStorage.setItem('name', res.name);
-    // localStorage.setItem('role', res.role);
-    // console.log("local",localStorage);
-    if (response.ok) {
-      const res = await response.json();
-      console.log("Response received from the login route:", res);
-      localStorage.setItem('name', res.user.name);
-    localStorage.setItem('role', res.user.role);
-    console.log("localStorage:", localStorage);
-    const userRole = res.user.role;
-      let dashboardPath;
-      console.log("Userrole  recieved is" , userRole) ;
-      switch (userRole) {
-        case 1:
-          dashboardPath = "/User_Dashboard";
-          break;
-        case 2: // LAWYER
-          dashboardPath = "/Lawyer_Dashboard";
-          break;
-        case 3: // POLICE
-          dashboardPath = "/Police_Dashboard";
-          break;
-        case 4: // JUDGE
-          dashboardPath = "/Admin_Dashboard";
-          break;
-        case 5: // SUPERUSER
-          dashboardPath = "/Superuser_Dashboard";
-          break;
-        default:
-          alert("Unknown role. Please try again.");
-          return;
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.message || "Invalid credentials. Please try again.");
+        setLoading(false);
+        return;
       }
 
-      router.push(dashboardPath);
-    } else {
-      alert("Invalid credentials. Please try again.");
+      const res = await response.json();
+      const { role, name } = res.user;
+
+      localStorage.setItem("name", name);
+      localStorage.setItem("role", role);
+
+      const dashboardRoutes = {
+        1: "/User_Dashboard",        // CITIZEN
+        2: "/Lawyer_Dashboard",     // LAWYER
+        3: "/Police_Dashboard",     // POLICE
+        4: "/Admin_Dashboard",      // JUDGE
+        5: "/Superuser_Dashboard",  // SUPERUSER
+      };
+
+      router.push(dashboardRoutes[role] || "/");
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-700 mb-2">
-              Email ID
-            </label>
-            <input
-              type="email"
-              id="email"
-              className="w-full p-2 border border-gray-300 rounded-lg"
-              value={email}
-              onChange={handleEmailChange}
-              required
-            />
-          </div>
+    <div
+  className="flex justify-between items-center min-h-screen"
+  style={{
+    background:
+      "radial-gradient(circle,rgba(253, 248, 225, 1)  5%, rgba(109, 76, 65, 1) 81%)",
+  }}
+>
+      <div className="w-1/2 flex justify-center">
+        <div className="bg-white p-8 rounded-lg shadow-lg w-[380px] h-[450px]">
+          <h2 className="text-2xl font-extrabold mb-6 text-center text-[#6D4C41]">Login</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-6">
+              <label htmlFor="email" className="block text-[#6D4C41] mb-2">
+                Email ID
+              </label>
+              <input
+                type="email"
+                id="email"
+                className="w-full p-3 border border-[#6D4C41] rounded-md"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-700 mb-2">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              className="w-full p-2 border border-gray-300 rounded-lg"
-              value={password}
-              onChange={handlePasswordChange}
-              required
-            />
-          </div>
+            <div className="mb-6 relative">
+              <label htmlFor="password" className="block text-[#6D4C41] mb-2">
+                Password
+              </label>
+              <input
+          type={showPassword ? "text" : "password"} // Toggle between text and password type
+          id="password"
+          className="w-full p-3 border border-[#6D4C41] rounded-md pr-10" // Added padding to the right for the button
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button
+          type="button"
+          onClick={togglePasswordVisibility}
+          className="absolute right-3 mt-6 transform -translate-y-1/2 text-[#6D4C41] hover:text-[#3E2723] focus:outline-none"
+        >
+          {showPassword ? "Hide" : "Show"} {/* Button text toggle */}
+        </button>
+         
+            </div>
 
-          <div className="flex justify-center">
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
-            >
-              Sign In
-            </button>
-          </div>
-        </form>
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                className="w-full bg-[#6D4C41] text-white p-3 rounded-md hover:bg-[#5A3A35] font-bold"
+                disabled={loading}
+              >
+                {loading ? "Signing In..." : "Sign In"}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div className="w-1/2 flex justify-center">
+        <img
+          src="/WarrantBuddy.png" // Replace with your image path
+          alt="Login Image"
+
+          className="w-[450px] object-cover rounded-xl shadow-md"
+        />
       </div>
     </div>
   );
 }
 
-export default page
+export default Page;
