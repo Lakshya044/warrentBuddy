@@ -2,15 +2,15 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbconnect';
 // import { Warrant,UserWarrant } from '@/model/user/warrantModel'; 
-import { FIR } from '@/model/user/warrantModel'; 
+import { FIR } from '@/model/user/firModel'; 
 import { Bail } from '@/model/user/bailModel';
 import { authenticate, checkRole } from '@/middleware/authMiddleware';
-
+import { Warrant } from "@/model/user/warrantModel";
 // Function to handle unauthorized access
 const handleUnauthorized = () => {
     return NextResponse.json({ message: 'Unauthorized. You do not have permission to perform this action.' }, { status: 403 });
 };
-import { Warrant } from "@/model/user/warrantModel";
+
 const createWarrant = async (body) => {
     const { warrantType, accusedName, aadharNo, details, pincode, policeStationId, address} = body;
 
@@ -159,9 +159,9 @@ async function handlePOST(req) {
 export const POST = authenticate((req, res, next) => {
     const url = new URL(req.url);
     const type = url.pathname.split('/')[3];
-
+  console.log("hiii it is")
     if (type === 'warrant' || type === 'bailapprove') {
-        return checkRole(1)(handlePOST)(req, res, next); // Role 1 for warrant and bail approval
+        return checkRole(4)(handlePOST)(req, res, next); // Role 1 for warrant and bail approval
     } else if (type === 'FIR' || type === 'userwarrant') {
         return checkRole(2)(handlePOST)(req, res, next); // Role 2 for FIR and user warrant
     // } else if (type === 'requestbail') {
