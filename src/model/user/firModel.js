@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 const firSchema = new mongoose.Schema({
   firNo: {
     type: String,

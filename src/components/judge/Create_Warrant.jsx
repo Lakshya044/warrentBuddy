@@ -35,7 +35,7 @@ export default function CreateWarrant() {
         },
         body: JSON.stringify(formData),
       });
-
+      console.log("response",response);
       if (response.ok) {
         alert('Warrant created successfully!');
         setFormData({

@@ -74,7 +74,7 @@ const counterSchema = new mongoose.Schema({
 });
 
 const Counter = mongoose.models.Counter || mongoose.model('Counter', counterSchema);
-module.exports = Counter;
+// moduleexports = Counter;
 
 
 export const Warrant = mongoose.models.Warrant || mongoose.model('WarrantSchema', WarrantSchema);
