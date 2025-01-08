@@ -1,134 +1,36 @@
-import React, { useState, useEffect } from "react";
-import "./AddUsers.css";
 
-const AddUsers = () => {
-  const [students, setStudents] = useState([]);
-  const [loading, setLoading] = useState(true);
+'use client'
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';  
+import SuperAdminDashboard from '@/components/SuperUser/Rolechange'
+import Unauthorized from '@/components/unauthorized'; 
 
-  // Fetch students when the component mounts
+export default function SuperUserDashboard() {
+  const router = useRouter();
+  const [isAuthorized, setIsAuthorized] = useState(null); 
   useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await fetch("/api/fetch/", {
-          headers: {
-            'Content-Type': 'application/json',
-            "Authorization": `Bearer ${token}` // Correctly using Bearer token
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setStudents(data.students || []); // Ensuring data.students is always an array
-        } else {
-          console.error('Failed to fetch students:', response.statusText);
-        }
-      } catch (error) {
-        console.error("Error fetching students:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchStudents();
-  }, []);
-
-  // Handle delete action
-  const handleDelete = async (userId) => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:8080/user/${userId}`, {
-        method: "DELETE",
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": `Bearer ${token}`, // Authorization header to pass token
-        },
-      });
-
-      if (response.ok) {
-        setStudents(students.filter(student => student._id !== userId));
-      } else {
-        console.error('Failed to delete user:', response.statusText);
-      }
-    } catch (error) {
-      console.error("Error deleting user:", error);
+    const userRole = localStorage.getItem('role');  
+    if (userRole === '5') {  
+      setIsAuthorized(true);  
+    } else {
+      setIsAuthorized(false);  
     }
-  };
+  }, []);  
 
-  // Handle update action (change user role)
-  const handleUpdate = async (userId, updatedData) => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:8080/user/${userId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, // Authorization header to pass token
-        },
-        body: JSON.stringify(updatedData),
-      });
+  if (isAuthorized === null) {
+    return <div>Loading...</div>;  
+  }
 
-      if (response.ok) {
-        setStudents(students.map(student =>
-          student._id === userId ? { ...student, ...updatedData } : student
-        ));
-      } else {
-        console.error('Failed to update user:', response.statusText);
-      }
-    } catch (error) {
-      console.error("Error updating user:", error);
-    }
-  };
-
-  // Render the students in a table format
-  const renderTable = () => {
-    return (
-      <div className="table-container">
-        <table className="student-table">
-          <thead>
-            <tr>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {students.length > 0 ? (
-              students.map((student) => (
-                <tr key={student._id}>
-                  <td>{student.email}</td>
-                  <td>{student.role}</td>
-                  <td>
-                    <button
-                      onClick={() => handleUpdate(student._id, { role: 'Admin' })} // Example role change
-                      className="update-button"
-                    >
-                      Update Role
-                    </button>
-                    <button
-                      onClick={() => handleDelete(student._id)}
-                      className="delete-button"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="3" className="no-students">No students found</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
+  if (isAuthorized === false) {
+    return <Unauthorized />;  
+  }
 
   return (
-    <div className="container">
-      <h2 className="heading">All Students</h2>
-      {loading ? <p>Loading...</p> : renderTable()}
+    <div className="container mx-auto p-4 bg-[#FDF8E1]">
+      <h1 className="text-3xl font-bold mb-6 text-center">SuperAdmin Dashboard</h1>
+
+      <SuperAdminDashboard/>
+
     </div>
   );
-};
-
-export default AddUsers;
+}
