@@ -65,7 +65,7 @@ export default function CreateWarrant() {
 
   return (
     <div
-      className="flex justify-between items-center min-h-screen"
+      className="flex justify-between items-center h-[700px]"
       style={{
         background:
           "radial-gradient(circle,rgba(253, 248, 225, 1) 5%, rgba(109, 76, 65, 1) 81%)",

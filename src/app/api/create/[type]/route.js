@@ -128,18 +128,6 @@ const processBailApproval = async (body) => {
     return NextResponse.json({ message: `Bail ${approvalStatus} processed successfully` }, { status: 200 });
 };
 
-// Function to process UserWarrant requests
-const processUserWarrantRequest = async (body) => {
-    const { warrantNo, warrantType, accusedName, aadharNo, details, pincode, status,address } = body;
-
-    if (!warrantNo || !warrantType || !accusedName || !aadharNo || !details || !pincode || !address) {
-        return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
-    }
-
-    const newUserWarrant = new UserWarrant({ warrantNo, warrantType, accusedName, aadharNo, details, pincode, address, status });
-    await newUserWarrant.save();
-    return NextResponse.json({ message: 'User Warrant created successfully', warrantId: newUserWarrant._id }, { status: 201 });
-};
 
 // Main POST handler function
 async function handlePOST(req) {

@@ -63,12 +63,12 @@ export default function WarrantMapping() {
 
     return (
         <div
-            className="min-h-screen flex flex-col items-center justify-center px-4 lg:px-8"
+            className="h-[500px] flex flex-col items-center justify-center px-4 lg:px-8"
             style={{
                 background: 'radial-gradient(circle, rgba(253, 248, 225, 1) 5%, rgba(109, 76, 65, 1) 81%)',
             }}
         >
-            <div className="max-w-5xl w-full bg-white shadow-lg rounded-lg p-6">
+            <div className="w-full bg-white shadow-lg rounded-lg p-6">
                 <h1 className="text-4xl font-bold mb-6 text-center text-[#6D4C41]">Warrants</h1>
                 <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:space-x-4">
                     <input
@@ -96,7 +96,9 @@ export default function WarrantMapping() {
                                 <tr className="bg-[#6D4C41] text-white">
                                     <th className="p-4 text-left">Warrant No</th>
                                     <th className="p-4 text-left">Warrant Type</th>
+                                    <th className="p-4 text-left">Issue Date</th>
                                     <th className="p-4 text-left">Accused Name</th>
+                                    <th className="p-4 text-left">Aaadhar Number</th>
                                     <th className="p-4 text-left">Details</th>
                                     <th className="p-4 text-left">Status</th>
                                     <th className="p-4 text-center">Actions</th>
@@ -107,7 +109,9 @@ export default function WarrantMapping() {
                                     <tr key={warrant._id} className="hover:bg-[#FFE9D6]">
                                         <td className="p-4 border-b border-[#6D4C41]">{warrant.warrantNo}</td>
                                         <td className="p-4 border-b border-[#6D4C41]">{warrant.warrantType}</td>
+                                        <td className="p-4 border-b border-[#6D4C41]">{warrant.issueDate}</td>
                                         <td className="p-4 border-b border-[#6D4C41]">{warrant.accusedName}</td>
+                                        <td className="p-4 border-b border-[#6D4C41]">{warrant.aadharNo}</td>
                                         <td className="p-4 border-b border-[#6D4C41]">{warrant.details}</td>
                                         <td className="p-4 border-b border-[#6D4C41]">{warrant.status}</td>
                                         <td className="p-4 border-b border-[#6D4C41] text-center">
@@ -115,7 +119,7 @@ export default function WarrantMapping() {
                                                 onClick={() => handleDownload(warrant._id)}
                                                 className="bg-[#5A3A35] hover:bg-[#472D27] text-white px-3 py-1 rounded"
                                             >
-                                                Download FIR
+                                                Download DOC
                                             </button>
                                         </td>
                                     </tr>
