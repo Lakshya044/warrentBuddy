@@ -53,52 +53,76 @@ const createWarrant = async (body) => {
 };
 
 // UPDATE WARRANT TO USER
-const updateWarrantVisibility = async (req, res) => {
-    if (req.method !== "POST") {
-        return res.status(405).json({ message: "Method not allowed" });
-    }
+const updateWarrantVisibility = async (body) => {
+    const { warrantNo, visibleToUser } = body;
 
-    const { warrantNo, visibleToUser } = req.body;
+    // Log the input body
+    console.log("Received body:", body);
 
+    // Check if warrantNo is missing
     if (!warrantNo) {
-        return res.status(400).json({ message: "Warrant number is required" });
+        console.error("Error: Warrant number is required");
+        return { status: 400, message: "Warrant number is required" };
     }
 
     try {
+        console.log("Connecting to the database...");
         await dbConnect();
+
+        // Log the warrantNo and visibleToUser before the query
+        console.log("Updating warrant visibility for:", { warrantNo, visibleToUser });
+
         const warrant = await Warrant.findOneAndUpdate(
             { warrantNo },
             { visibleToUser },
             { new: true }
         );
 
+        // Check if warrant was found
         if (!warrant) {
-            return res.status(404).json({ message: "Warrant not found" });
+            console.error("Error: Warrant not found for warrantNo:", warrantNo);
+            return NextResponse.json(
+                { status: 404, message: "Warrant not found" },
+                { status: 404 }
+            );
         }
 
-        res.status(200).json({ message: `Warrant visibility updated to: ${visibleToUser}` });
+        console.log("Warrant updated successfully:", warrant);
+        return NextResponse.json(
+            { status: 200, message: `Warrant visibility updated to: ${visibleToUser}` },
+            { status: 200 }
+        );
     } catch (error) {
-        res.status(500).json({ message: "Failed to update warrant visibility", error: error.message });
+        // Log the error
+        console.error("Error during database operation:", error);
+        return NextResponse.json(
+            { status: 500, message: "Failed to update warrant visibility", error: error.message },
+            { status: 500 }
+        );
     }
-  };
+};
+
   
 // UPDATE THE STATUS OF A WARRANT AS EXECUTED FROM PENDING
-const updateWarrantStatus = async(req , res) =>{
-    if (req.method !== "POST") {
-        return res.status(405).json({ message: "Method not allowed" });
-    }
 
-    const { warrantNo } = req.body;
+const updateWarrantStatus = async (body) => {
+    const { warrantNo } = body
 
+    // Log the input body
+    console.log("Received body:", { warrantNo });
+
+    // Check if warrantNo is missing
     if (!warrantNo) {
-        return res.status(400).json({ message: "Warrant number is required" });
+        console.error("Error: Warrant number is required");
+        return NextResponse.json({ status: 400, message: "Warrant number is required" }, { status: 400 });
     }
 
     try {
+        console.log("Connecting to the database...");
         await dbConnect();
 
-        // Log warrantNo for debugging
-        console.log("Warrant number received:", warrantNo);
+        // Log the warrantNo before the query
+        console.log("Updating warrant status for:", { warrantNo });
 
         const warrant = await Warrant.findOneAndUpdate(
             { warrantNo },
@@ -106,27 +130,20 @@ const updateWarrantStatus = async(req , res) =>{
             { new: true } // Return the updated document
         );
 
+        // Check if warrant was found
         if (!warrant) {
-            // Log warning if no matching document is found
-            console.warn(`No warrant found for warrantNo: ${warrantNo}`);
-            return res.status(404).json({ message: "Warrant not found" });
+            console.error("Error: Warrant not found for warrantNo:", warrantNo);
+            return NextResponse.json({ status: 404, message: "Warrant not found" }, { status: 404 });
         }
 
-        // Log success and the updated warrant document
         console.log("Warrant updated successfully:", warrant);
-
-        res.status(200).json({
-            message: "Warrant marked as executed successfully",
-            warrant,
-        });
+        return NextResponse.json({ status: 200, message: "Warrant marked as executed successfully", warrant }, { status: 200 });
     } catch (error) {
-        console.error("Error updating warrant status:", error.message);
-        res.status(500).json({
-            message: "Failed to update warrant status",
-            error: error.message,
-        });
+        // Log the error
+        console.error("Error during database operation:", error);
+        return NextResponse.json({ status: 500, message: "Failed to update warrant status", error: error.message }, { status: 500 });
     }
-}
+};
 
 
 // Function to process bail requests
