@@ -164,8 +164,6 @@ async function handlePOST(req) {
         } else if (type === 'bailapprove') {
             return await processBailApproval(body);
 
-        } else if (type === 'userwarrant') {
-            return await processUserWarrantRequest(body);
 
         } else {
             return NextResponse.json({ message: 'Invalid request type' }, { status: 400 });
@@ -183,8 +181,8 @@ export const POST = authenticate((req, res, next) => {
   console.log("hiii it is handler function for role checks")
     if (type === 'create_warrant' || type === 'bailapprove') {
         return checkRole(4)(handlePOST)(req, res, next); 
-    } else if (type === 'FIR' || type === 'userwarrant') {
-        return checkRole(2)(handlePOST)(req, res, next); // Role 2 for FIR and user warrant
+    } else if (type === 'FIR' || type === 'relese_warrant_to_citizen') {
+        return checkRole(3)(handlePOST)(req, res, next); // Role 2 for FIR and user warrant
     // } else if (type === 'requestbail') {
     //     return handlePOST(req, res); // No role restriction for requesting bail
     } else {

@@ -1,6 +1,7 @@
 import dbConnect from '@/lib/dbconnect';
-import { Warrant, FIR } from '@/model/user/warrantModel'; 
+import { Warrant } from '@/model/user/warrantModel'; 
 import { Bail } from '@/model/user/bailModel';
+import{FIR} from '@/model/user/firModel'
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
