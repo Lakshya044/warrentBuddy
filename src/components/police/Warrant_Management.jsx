@@ -48,8 +48,13 @@ export default function WarrantManagement() {
                 body: JSON.stringify({ warrantNo, visibleToUser }),
             });
 
+
+            console.log("response", response);
             if (!response.ok) {
                 throw new Error("Failed to update visibility");
+            }else{
+                const responseData = await response.json();
+                alert(`Success: ${responseData.message}`);
             }
 
             setSuccess(`Warrant visibility updated successfully`);
@@ -69,6 +74,11 @@ export default function WarrantManagement() {
             console.log("response for marking warrant as executed" , response ) ;
             if (!response.ok) {
                 throw new Error("Failed to mark as executed");
+            }else{
+                const responseData = await response.json();
+
+               
+                alert(`Success: ${responseData.message}`);
             }
 
             setSuccess(`Warrant marked as executed successfully`);
