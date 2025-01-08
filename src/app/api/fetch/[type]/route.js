@@ -34,6 +34,7 @@ export async function POST(req) {
             console.log("Warrant fetched:", warrant);
 
             if (!warrant) {
+                console.log("Typing warrant not found message")
                 return NextResponse.json({ message: 'Warrant not found' }, { status: 404 });
             }
 
@@ -50,29 +51,7 @@ export async function POST(req) {
 
             return NextResponse.json({ bail }, { status: 200 });
 
-        } else if (type === 'fir') {
-            console.log("Fetching FIR details...");
-            const fir = await FIR.find({ policeStationId });
-            console.log("FIR fetched:", fir);
-
-            if (!fir) {
-                return NextResponse.json({ message: 'FIR not found' }, { status: 404 });
-            }
-
-            return NextResponse.json({ fir }, { status: 200 });
-
-        } else if (type === 'userfir') {
-            console.log("Fetching user FIR details...");
-            const userFIRs = await FIR.find({ aadharNo });
-            console.log("User FIRs fetched:", userFIRs);
-
-            if (userFIRs.length === 0) {
-                return NextResponse.json({ message: 'No FIRs found for this Aadhar number' }, { status: 404 });
-            }
-
-            return NextResponse.json({ userFIRs }, { status: 200 });
-
-        } 
+        }
         else if(type==='requestbail'){
             
                 const { aadharNo, accusedName, details, policeStationId, address, pincode } = body;
