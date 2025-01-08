@@ -1,8 +1,9 @@
 import dbConnect from '@/lib/dbconnect';
 import { Warrant } from '@/model/user/warrantModel'; 
 import { Bail } from '@/model/user/bailModel';
+import User from '@/model/user/user_model'
 import { NextResponse } from 'next/server';
-
+console.log("User Model:", User);
 export async function POST(req) {
     try {
         console.log("Connecting to database...");
@@ -51,6 +52,7 @@ export async function POST(req) {
             return NextResponse.json({ bail }, { status: 200 });
 
         }
+        
         else {
             console.log("Invalid request type");
             return NextResponse.json({ message: 'Invalid request type' }, { status: 400 });
@@ -60,3 +62,31 @@ export async function POST(req) {
         return NextResponse.json({ message: 'Server error', error: error.message }, { status: 500 });
     }
 }
+
+
+export const GET = async (req) => {
+    try {
+        console.log("Connecting to database...");
+        await dbConnect();
+        console.log("Database connected successfully");
+
+        // Extract the 'type' from the URL path
+        const url = new URL(req.url);
+        const type = url.pathname.split('/')[3]; 
+
+        if (type === 'all') {
+            // Fetch all users from the database
+            console.log("Fetching all users...");
+            const users = await User.find({}).select("name email role phonenumber");
+            console.log("Fetched users:", users);
+            return NextResponse.json({ users }, { status: 200 });
+        }
+
+        // Handle cases where the 'type' is not 'all'
+        return NextResponse.json({ message: "Invalid type parameter" }, { status: 400 });
+
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        return NextResponse.json({ message: "Error fetching users" }, { status: 500 });
+    }
+};
