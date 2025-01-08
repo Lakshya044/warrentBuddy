@@ -1,7 +1,6 @@
 import dbConnect from '@/lib/dbconnect';
 import { Warrant } from '@/model/user/warrantModel'; 
 import { Bail } from '@/model/user/bailModel';
-import{FIR} from '@/model/user/firModel'
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
@@ -52,19 +51,7 @@ export async function POST(req) {
             return NextResponse.json({ bail }, { status: 200 });
 
         }
-        else if(type==='requestbail'){
-            
-                const { aadharNo, accusedName, details, policeStationId, address, pincode } = body;
-            
-                if (!aadharNo || !accusedName || !pincode || !details || !policeStationId || !address) {
-                    return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
-                }
-            
-                const newBail = new Bail({ aadharNo, accusedName, details, pincode, policeStationId, address, status: 'Pending' });
-                await newBail.save();
-                return NextResponse.json({ message: 'Bail request submitted successfully', bailId: newBail._id }, { status: 201 });
-           
-        }else {
+        else {
             console.log("Invalid request type");
             return NextResponse.json({ message: 'Invalid request type' }, { status: 400 });
         }
