@@ -1,7 +1,6 @@
 
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbconnect';
-import { FIR } from '@/model/user/firModel'; 
 import { Bail } from '@/model/user/bailModel';
 import { authenticate, checkRole } from '@/middleware/authMiddleware';
 import { Warrant } from "@/model/user/warrantModel";
