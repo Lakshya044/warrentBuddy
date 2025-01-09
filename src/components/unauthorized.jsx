@@ -6,7 +6,6 @@ export default function Unauthorized() {
   const router = useRouter();
 
   useEffect(() => {
-    // Optionally, you could add a redirect after a certain time or on any condition
     const timer = setTimeout(() => {
       // Redirect to homepage or login page after 5 seconds
       router.push('/');

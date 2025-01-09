@@ -145,17 +145,17 @@ const updateWarrantStatus = async (body) => {
 
 
 // Function to process bail requests
-// const processBailRequest = async (body) => {
-//     const { aadharNo, accusedName, details, policeStationId, address, pincode } = body;
+const processBailRequest = async (body) => {
+    const { aadharNo, accusedName, details, policeStationId, address, pincode } = body;
 
-//     if (!aadharNo || !accusedName || !pincode || !details || !policeStationId || !address) {
-//         return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
-//     }
+    if (!aadharNo || !accusedName || !pincode || !details || !policeStationId || !address) {
+        return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
+    }
 
-//     const newBail = new Bail({ aadharNo, accusedName, details, pincode, policeStationId, address, status: 'Pending' });
-//     await newBail.save();
-//     return NextResponse.json({ message: 'Bail request submitted successfully', bailId: newBail._id }, { status: 201 });
-// };
+    const newBail = new Bail({ aadharNo, accusedName, details, pincode, policeStationId, address, status: 'Pending' });
+    await newBail.save();
+    return NextResponse.json({ message: 'Bail request submitted successfully', bailId: newBail._id }, { status: 201 });
+};
 
 // Function to process bail approval/rejection
 const processBailApproval = async (body) => {
@@ -193,7 +193,7 @@ async function handlePOST(req) {
         }else if(type ==='mark_warrant_as_executed'){
             return await updateWarrantStatus(body) ;
         }
-        else if (type === 'requestbail') {
+        else if (type === 'request_bail') {
             return await processBailRequest(body);
 
         } else if (type === 'bailapprove') {
@@ -217,7 +217,10 @@ export const POST = authenticate((req, res, next) => {
         return checkRole(4)(handlePOST)(req, res, next); 
     } else if (type === 'release_warrant_to_citizen' || type ==='mark_warrant_as_executed') {
         return checkRole(3)(handlePOST)(req, res, next); 
-    } else {
+    }else if(type === 'request_bail') {
+        return checkRole(2)(handlePOST)(req,res,next) ;
+    }
+    else {
         return handleUnauthorized();
     }
 });
