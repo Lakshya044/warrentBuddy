@@ -19,7 +19,7 @@ export async function POST(req) {
 
         if (type === 'userwarrant') {
             console.log("Fetching user warrant details...");
-            const userWarrant = await UserWarrant.findOne({ aadharNo });
+            const userWarrant = await Warrant.findOne({ aadharNo });
             console.log("User warrant fetched:", userWarrant);
 
             if (!userWarrant) {
@@ -51,6 +51,15 @@ export async function POST(req) {
 
             return NextResponse.json({ bail }, { status: 200 });
 
+        }else if(type ==='bail_on_aadhar'){
+            console.log("Fetching Bail request for the given aadhar")
+            const bail = await Bail.find({aadharNo}) 
+            console.log("Bail fetched" , bail) ;
+
+            if(!bail){
+                return NextResponse.json({message:"No Bail Requests Found"} , {status:404}) ;
+            }
+            return NextResponse.json({bail} , {status:200}) ;
         }
         
         else {
