@@ -22,7 +22,7 @@ function HomePage() {
         <div className="text-center mb-10">
           <h1 className="text-4xl text-[#FFD700] font-bold mb-4">
             Welcome to 
-            <span className="hover:underline hover:underline-offset-1 text-4xl font-extrabold text-[#FFB300]">WarrantBuddy</span>
+            <span className="hover:underline hover:underline-offset-1 text-4xl font-extrabold text-[#8b6f1a]">WarrantBuddy</span>
           </h1>
           <p className="text-lg text-[#3E2723]">
             A user-friendly platform revolutionizing <b> <i>Warrant Management</i></b>{' '}
@@ -35,30 +35,30 @@ function HomePage() {
           {[
             {
               title: "Check Warrants Issued Against You",
-              path: "login",
+              path: "/login",
               description: "Stay informed about any warrants issued.",
             },
             {
               title: "Talk to Our Virtual Assistant",
-              path: "login",
+              path: "/Dashboards/Chatbot",
               description:
                 "Enhance your knowledge about Law and Order.",
             },
             {
-              title: "File a Complaint Against Someone",
+              title: "Issue Warrants and Approve Bail Requests",
               path: "/login",
-              description: "Raise a complaint with ease and confidence.",
+              description: "As a Judge, Eradicate PaperWork and Fasten the Judiciary",
             },
             {
               title: "Contact a Legal Advisor",
               path: "/login",
               description:
-                "Get expert legal advice to guide you through.",
+                "Apply for a Bail Request with Ease anytime under the Lawyer of your Choice",
             },
           ].map((feature, index) => (
             <div
               key={index}
-              className="p-6 border rounded-lg shadow-lg text-center bg-[#1B5E20] flex flex-col justify-between border-[#D4AF37] hover:shadow-2xl transition duration-400"
+              className="p-6 border rounded-lg shadow-lg text-center bg-[#8b6f1a] flex flex-col justify-between border-[#D4AF37] hover:shadow-2xl transition duration-400"
             >
               <h2 className="text-lg text-[#FFD700] font-semibold mb-3">{feature.title}</h2>
               <p className="text-sm text-[#FFB300] mb-5">{feature.description}</p>
@@ -113,20 +113,6 @@ function HomePage() {
           </div>
         </div>
 
-        {/* CTA Section */}
-        {/* <div className="text-center py-10 rounded-lg">
-          <h2 className="text-xl font-bold mb-4">
-            Join <span className="text-blue-600">WarrantBuddy</span> Today!
-          </h2>
-          <p className="text-gray-700 mb-6">
-          Efficient Warrant Management: Handle warrant issuance, tracking, and updates seamlessly.
-FIR Check Made Easy: Instantly access and verify FIRs online.
-Quick Bail Requests: Prepare and submit bail applications effortlessly.
-Approval Workflow: Judges can review and approve warrants or bail requests in a streamlined process.
-Real-Time Status Updates: Stay informed with live notifications about warrant and bail application progress.
-          </p>
-          
-        </div> */}
       </div>
     </>
   );
