@@ -6,7 +6,6 @@ export default function WarrantMapping() {
     const [warrants, setWarrants] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-
     const handleFetchWarrants = async () => {
         if (!policeStationId) {
             setError('Please enter a police station ID');
@@ -40,22 +39,27 @@ export default function WarrantMapping() {
 
     const handleDownload = async (warrantId) => {
         try {
+            setLoading(true) ;
             const response = await fetch(`/api/download/warrant/${warrantId}`);
+            console.log("Response recieved for downloading the FIR, " , response) ;
             if (!response.ok) {
                 throw new Error('Failed to download FIR');
             }
-
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `FIR_${warrantId}.docx`;
+            a.download = `FIR_${warrantId}.pdf`;
             a.click();
             window.URL.revokeObjectURL(url);
         } catch (err) {
-            setError(err.message);
+            console.error("Error recieved for downloading FIR" , err);
+            alert('Error downloading FIR');
+        }finally{
+            setLoading(false) ;
         }
     };
+    
 
     useEffect(() => {
         console.log('Warrants state:', warrants);
@@ -63,7 +67,7 @@ export default function WarrantMapping() {
 
     return (
         <div
-            className="h-[500px] flex flex-col items-center justify-center px-4 lg:px-8"
+            className="h-[400px] flex flex-col items-center justify-center px-4 lg:px-8"
             style={{
                 background: 'radial-gradient(circle, rgba(253, 248, 225, 1) 5%, rgba(109, 76, 65, 1) 81%)',
             }}
@@ -118,8 +122,9 @@ export default function WarrantMapping() {
                                             <button
                                                 onClick={() => handleDownload(warrant._id)}
                                                 className="bg-[#5A3A35] hover:bg-[#472D27] text-white px-3 py-1 rounded"
+                                                disabled ={loading}
                                             >
-                                                Download DOC
+                                                {loading ? "Please Wait" : "Download PDF"}
                                             </button>
                                         </td>
                                     </tr>
