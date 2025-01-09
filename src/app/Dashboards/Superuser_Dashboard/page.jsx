@@ -26,8 +26,12 @@ export default function SuperUserDashboard() {
   }
 
   return (
-    <div className="container mx-auto p-4 bg-[#FDF8E1]">
-      <h1 className="text-3xl font-bold mb-6 text-center">SuperAdmin Dashboard</h1>
+    <div className="container mx-auto p-4 h-[560px]"
+    style={{
+      background:
+        "radial-gradient(circle,rgba(253, 248, 225, 1)  5%, rgba(109, 76, 65, 1) 61%)",
+    }}>
+      <h1 className="text-3xl font-bold mb-6 text-center text-[#6D4C41]">SuperAdmin Dashboard</h1>
 
       <SuperAdminDashboard/>
 

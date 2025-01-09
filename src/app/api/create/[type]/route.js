@@ -56,8 +56,7 @@ const createWarrant = async (body) => {
 const updateWarrantVisibility = async (body) => {
     const { warrantNo, visibleToUser } = body;
 
-    // Log the input body
-    console.log("Received body:", body);
+    console.log("Received body for making the warrant visible to user:", body);
 
     // Check if warrantNo is missing
     if (!warrantNo) {
@@ -108,7 +107,6 @@ const updateWarrantVisibility = async (body) => {
 const updateWarrantStatus = async (body) => {
     const { warrantNo } = body
 
-    // Log the input body
     console.log("Received body:", { warrantNo });
 
     // Check if warrantNo is missing
@@ -127,7 +125,7 @@ const updateWarrantStatus = async (body) => {
         const warrant = await Warrant.findOneAndUpdate(
             { warrantNo },
             { status: "Persued" },
-            { new: true } // Return the updated document
+            { new: true } 
         );
 
         // Check if warrant was found

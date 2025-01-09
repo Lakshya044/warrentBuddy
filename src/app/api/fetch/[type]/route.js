@@ -82,7 +82,7 @@ export const GET = async (req) => {
             return NextResponse.json({ users }, { status: 200 });
         }
 
-        // Handle cases where the 'type' is not 'all'
+        // cases where the 'type' is not 'all'
         return NextResponse.json({ message: "Invalid type parameter" }, { status: 400 });
 
     } catch (error) {
