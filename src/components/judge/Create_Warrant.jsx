@@ -213,7 +213,9 @@ export default function CreateWarrant() {
         <Image
           src="/WarrantBuddy.png"
           alt="Warrant Buddy"
-          className="w-[450px] object-cover rounded-xl shadow-md"
+          width={450}
+          height={450}
+          className="object-cover rounded-xl shadow-md"
         />
       </div>
     </div>

@@ -105,7 +105,9 @@ const Chatbot = () => {
         <Image
           src="/WarrantBuddy.png" 
           alt="WarrantBuddy"
-          className="w-[450px] h-[450px] object-cover rounded-xl shadow-md"
+          width={450}
+          height={450}
+          className="object-cover rounded-xl shadow-md"
         />
       </div>
     </div>

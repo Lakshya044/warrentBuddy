@@ -111,7 +111,7 @@ function Page() {
           onClick={togglePasswordVisibility}
           className="absolute right-3 mt-6 transform -translate-y-1/2 text-[#6D4C41] hover:text-[#3E2723] focus:outline-none"
         >
-          {showPassword ? "Hide" : "Show"} {/* Button text toggle */}
+          {showPassword ? "Hide" : "Show"}
         </button>
               </div>
               <div>
@@ -197,9 +197,11 @@ function Page() {
 
       <div className="w-4/10 flex justify-center mx-20">
         <Image
-          src="/WarrantBuddy.png" // Replace with your image path
+          src="/WarrantBuddy.png"
           alt="Register Image"
-          className="w-[450px] object-cover rounded-xl shadow-md"
+          width={450}
+          height={450}
+          className="object-cover rounded-xl shadow-md"
         />
       </div>
     </div>

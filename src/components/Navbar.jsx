@@ -71,14 +71,14 @@ function Navbar() {
       />
     </span>
     <span className="text-[#6c3929] flex flex-col items-center mx-4">
-      <div className="text-4xl font-extrabold text-[#6D4C41] drop-shadow-[2px_2px_0px_#3E2723] bg-clip-text text-transparent bg-gradient-to-r from-[#8B5A2B] via-[#6D4C41] to-[#3E2723]">Warrant Buddy</div>
-      <div className="text-m font-bold ml-[-15px]">Legal Document Management</div>
+      <div className="lg:text-4xl font-extrabold text-[#6D4C41] drop-shadow-[2px_2px_0px_#3E2723] bg-clip-text text-transparent bg-gradient-to-r from-[#8B5A2B] via-[#6D4C41] to-[#3E2723]">Warrant Buddy</div>
+      <div className="hidden lg:text-m lg:font-bold lg:ml-[-15px]">Legal Document Management</div>
     </span>
   </div>
 
   {/* Center Section */}
   {isLoggedIn && (
-    <div className="absolute left-1/2 transform -translate-x-1/2 text-2xl font-extrabold text-[#6D4C41] ">
+    <div className="absolute left-1/2 transform -translate-x-1/2 lg:text-2xl font-extrabold text-[#6D4C41] ">
       Welcome, {username}
     </div>
   )}
