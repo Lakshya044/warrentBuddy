@@ -101,12 +101,12 @@ const Chatbot = () => {
         </div>
       </div>
 
-      <div className="w-1/2 flex justify-center p-8 mt-12">
+      <div className="w-1/2 flex justify-center p-8 mt-2 max-h-[600px]">
         <Image
           src="/WarrantBuddy.png" 
           alt="WarrantBuddy"
-          width={450}
-          height={450}
+          width={600}
+          height={400}
           className="object-cover rounded-xl shadow-md"
         />
       </div>
