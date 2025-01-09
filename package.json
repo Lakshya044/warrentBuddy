@@ -2,7 +2,7 @@
   "name": "wb_next",
   "version": "0.1.0",
   "private": true,
-  "type" : "module",
+  "type": "module",
   "scripts": {
     "dev": "next ",
     "build": "next build",
@@ -21,7 +21,7 @@
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.2",
-    "next": "14.2.5",
+    "next": "^15.1.4",
     "next-auth": "^4.24.7",
     "node-signpdf": "^3.0.0",
     "pdf": "^0.1.0",
