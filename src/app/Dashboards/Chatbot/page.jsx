@@ -1,5 +1,5 @@
 'use client';
-
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { FaPaperPlane, FaRobot, FaUserCircle } from 'react-icons/fa';
 
@@ -11,13 +11,11 @@ const Chatbot = () => {
   const handleSend = async () => {
     if (!message.trim()) return;
 
-    // Add user message to chat
     setChat([...chat, { sender: 'user', text: message }]);
     setLoading(true);
     setMessage('');
 
     try {
-      // Send message to backend using fetch
       const response = await fetch('/api/chatbot', {
         method: 'POST',
         headers: {
@@ -34,7 +32,6 @@ const Chatbot = () => {
       const reply = data.reply;
       const output = reply.replaceAll('**', ' ');
       const text_to_display = output.replaceAll('*', '\n \n');
-      // Add AI reply to chat
       setChat([...chat, { sender: 'user', text: message }, { sender: 'ai', text: text_to_display }]);
     } catch (error) {
       console.error('Error sending message:', error);
@@ -50,7 +47,6 @@ const Chatbot = () => {
         background: 'radial-gradient(circle, rgba(253, 248, 225, 1) 5%, rgba(109, 76, 65, 1) 81%)',
       }}
     >
-      {/* Chatbot Section */}
       <div className="w-1/2 flex flex-col items-center p-8">
         <div className="w-full max-w-xl border border-[#6D4C41] rounded-lg shadow-lg overflow-hidden bg-white">
           <div className="bg-[#6D4C41] text-white text-center py-3">
@@ -105,9 +101,8 @@ const Chatbot = () => {
         </div>
       </div>
 
-      {/* Image Section */}
       <div className="w-1/2 flex justify-center p-8 mt-12">
-        <img
+        <Image
           src="/WarrantBuddy.png" 
           alt="WarrantBuddy"
           className="w-[450px] h-[450px] object-cover rounded-xl shadow-md"

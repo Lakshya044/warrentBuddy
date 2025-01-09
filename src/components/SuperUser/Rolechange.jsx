@@ -6,7 +6,6 @@ const SuperAdminDashboard = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Fetch all users from the API
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -29,7 +28,6 @@ const SuperAdminDashboard = () => {
         fetchUsers();
     }, []);
 
-    // Handle role update
     const handleRoleUpdate = async (userId, newRole) => {
         try {
             const response = await axios.post("/api/superAdmin/create", {
@@ -38,7 +36,6 @@ const SuperAdminDashboard = () => {
             });
 
             if (response.status === 200) {
-                // Update the user in the state
                 setUsers((prevUsers) =>
                     prevUsers.map((user) =>
                         user._id === userId ? { ...user, role: newRole } : user
@@ -54,7 +51,6 @@ const SuperAdminDashboard = () => {
         }
     };
 
-    // Mapping roles to their display names
     const roleNames = {
         1: 'User',
         2: 'Lawyer',
@@ -101,6 +97,7 @@ const SuperAdminDashboard = () => {
                                             <option value={2}>Lawyer</option>
                                             <option value={3}>Police</option>
                                             <option value={4}>Judge</option>
+                                            <option value={5}>SuperAdmin</option>
                                         </select>
                                     </td>
                                 </tr>

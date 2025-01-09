@@ -64,7 +64,7 @@ export default function BailManagement() {
             }
 
             setSuccess(`Bail for Aadhar No: ${aadharNo} has been ${approvalStatus}`);
-            handleFetchBails(); // Refresh bails list after update
+            handleFetchBails();
         } catch (err) {
             setError(err.message);
         } finally {
@@ -127,13 +127,13 @@ export default function BailManagement() {
                                         <td className="border-b p-3 text-sm">{bail.status}</td>
                                         <td className="border-b p-3 text-sm">
                                             <button
-                                                className="bg-green-600 text-white px-3 py-1 rounded mr-2 hover:bg-green-700"
+                                                className="bg-[#207918] text-white px-3 py-1 rounded mr-2 hover:bg-[#2a8122]"
                                                 onClick={() => handleApproveBail(bail.aadharNo, 'Approved')}
                                             >
                                                 Approve
                                             </button>
                                             <button
-                                                className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
+                                                className="bg-[#a11c1c] text-white px-3 py-1 rounded hover:bg-[#842222]"
                                                 onClick={() => handleApproveBail(bail.aadharNo, 'Rejected')}
                                             >
                                                 Reject

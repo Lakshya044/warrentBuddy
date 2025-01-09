@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 function Page() {
   const [formData, setFormData] = useState({
@@ -195,7 +196,7 @@ function Page() {
       </div>
 
       <div className="w-4/10 flex justify-center mx-20">
-        <img
+        <Image
           src="/WarrantBuddy.png" // Replace with your image path
           alt="Register Image"
           className="w-[450px] object-cover rounded-xl shadow-md"

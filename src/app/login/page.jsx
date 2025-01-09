@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 function Page() {
   const [email, setEmail] = useState("");
@@ -66,8 +67,8 @@ function Page() {
 >
 
       <div className="w-1/2 flex justify-center">
-        <img
-          src="/WarrantBuddy.png" // Replace with your image path
+        <Image
+          src="/WarrantBuddy.png"
           alt="Login Image"
 
           className="w-[450px] object-cover rounded-xl shadow-md"

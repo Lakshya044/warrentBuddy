@@ -9,7 +9,7 @@ export const generatePDF = async (warrant) => {
     try {
         const name = cookies().get('name')?.value || 'Authorized Officer';
         const formattedIssueDate = new Date(warrant.issueDate).toLocaleDateString();
-        const generatedTimestamp = new Date().toLocaleString(); // ✅ Get current date & time
+        const generatedTimestamp = new Date().toLocaleString(); 
 
         // Gemini AI Prompt
         const prompt = `
@@ -26,6 +26,7 @@ export const generatePDF = async (warrant) => {
 
             Provide the response in proper legal report format. Do not send back any text in bold, also do not respond with placeholders for any officers' names, and never wrap anything in brackets []. 
             At the top add "Authorised Copy of Warrant Issued Against ${warrant.accusedName}" with proper alignment and spacing.  
+            If the details section is meaningful, you are free to add more description to it which makes sense and makes the document more legible to the public.
             Ensure line breaks (\n) so that content does not overflow.  
             At the bottom, add a note about "The Legacy of Indian Judiciary" to reflect its historical importance.
         `;
@@ -70,7 +71,7 @@ export const generatePDF = async (warrant) => {
 
         yPosition -= 180;
 
-        const legacyText = "The Indian judiciary, rooted in the principles of justice, equality, and fairness, has played a crucial role in upholding the Constitution and protecting citizens' rights. With a legacy spanning centuries, it has evolved into a pillar of democracy, ensuring transparency, accountability, and the rule of law. From landmark judgments safeguarding fundamental rights to progressive interpretations of legal doctrines, the judiciary has continuously shaped the nation's legal landscape. Its independence and commitment to justice have strengthened public trust, making it a beacon of hope for those seeking redress. Through its evolving jurisprudence, it remains a guardian of constitutional values and societal progress.";
+        const legacyText = "The Indian judiciary, one of the world's oldest legal systems, has evolved from ancient texts like the Manusmriti and Arthashastra to a structured framework influenced by Mughal and British rule. Today, it operates as a three-tiered system comprising the Supreme Court, 25 High Courts, and over 19,000 lower courts, serving 1.4 billion people. Landmark judgments such as Kesavananda Bharati v. State of Kerala (1973) upheld the Basic Structure Doctrine, ensuring constitutional integrity, while Vishaka v. State of Rajasthan (1997) established workplace harassment guidelines. The judiciary has also played a key role in expanding fundamental rights, as seen in Navtej Singh Johar v. Union of India (2018), which decriminalized Section 377, and K.S. Puttaswamy v. Union of India (2017), which recognized the right to privacy as a fundamental right. Despite its legacy of justice, challenges persist, with over 4.5 crore pending cases as of 2025. Judicial reforms, including digital courts, AI-driven case management, and e-filing systems, aim to enhance efficiency. The Indian judiciary remains a pillar of democracy, upholding justice, fairness, and constitutional supremacy while continuously evolving to meet the needs of a modern society.";
         const wrappedLines = wrapText(legacyText, 500, fontItalic, 11, page);
 
         page.drawText('The Legacy of Indian Judiciary:', {

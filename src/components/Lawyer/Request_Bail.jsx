@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { useState } from 'react';
 
 export default function RequestBail() {
@@ -192,7 +193,7 @@ export default function RequestBail() {
       </div>
 
       <div className="w-4/10 flex justify-center mx-20">
-        <img
+        <Image
           src="/WarrantBuddy.png"
           alt="Request Bail"
           className="w-[450px] object-cover rounded-xl shadow-md"

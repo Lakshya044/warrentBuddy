@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { useState } from 'react';
 
 export default function CreateWarrant() {
@@ -209,7 +210,7 @@ export default function CreateWarrant() {
       </div>
 
       <div className="w-4/10 flex justify-center mx-20">
-        <img
+        <Image
           src="/WarrantBuddy.png"
           alt="Warrant Buddy"
           className="w-[450px] object-cover rounded-xl shadow-md"

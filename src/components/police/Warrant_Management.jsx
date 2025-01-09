@@ -141,13 +141,13 @@ export default function WarrantManagement() {
                                         <td className="border-b p-3 text-sm">{warrant.details}</td>
                                         <td className="border-b p-3 text-sm">
                                             <button
-                                                className="bg-green-600 text-white px-3 py-1 rounded mr-2 hover:bg-green-700"
+                                                className="bg-[#207918] text-white px-3 py-1 rounded mr-2 hover:bg-[#2a8122]"
                                                 onClick={() => handleUpdateVisibility(warrant.warrantNo, true)}
                                             >
                                                 Release to User
                                             </button>
                                             <button
-                                                className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
+                                                className="bg-[#a11c1c] text-white px-3 py-1 rounded hover:bg-[#842222]"
                                                 onClick={() => handleMarkExecuted(warrant.warrantNo)}
                                             >
                                                 Mark Executed

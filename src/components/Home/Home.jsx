@@ -1,4 +1,4 @@
-"use client"; // Ensure this component is a Client Component
+"use client"; 
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -6,7 +6,6 @@ import Image from "next/image";
 function HomePage() {
   const router = useRouter();
 
-  // Event handlers for the button clicks
   const handleClick = (path) => {
     router.push(path);
   };
