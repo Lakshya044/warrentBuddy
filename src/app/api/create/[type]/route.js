@@ -164,7 +164,7 @@ const processBailApproval = async (body) => {
         return NextResponse.json({ message: 'Bail ID and approval status are required' }, { status: 400 });
     }
 
-    const bail = await Bail.findOne({ policeStationId });
+    const bail = await Bail.findOne({ aadharNo });
     if (!bail) {
         return NextResponse.json({ message: 'Bail request not found' }, { status: 404 });
     }
