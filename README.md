@@ -14,23 +14,33 @@ Validated Warrant Copy Download for Offline Use.
 **Role-Based Functionalities:**
 **1. Citizen:**
 View warrants issued against you and your close relatives, track using Aadhar Card, now be informed against Fraudulent Calls and Spam Messages threatening Legal Actions.
+username: User@gmail.com
+password: superpassword
 
 **2. Lawyer:**
 Submit bail applications.
 Assist clients with legal processes via the dashboard.
+username: Lawyer@gmail.com
+password: superpassword
 
 **3. Police:**
 Receive all Warrants issued for your respective Police Station, track real-time data and take actions accordingly.
 Process Bail Requests forwarded to your Police Station.
+username: Police@gmail.com
+password: superpassword
 
 **4. Judge:**
 Issue Warrant against an Accused.
 Approve or reject Bail Requests.
 Digitally sign documents and provide an authorised copy of the document to the beneficiary.
+username: Judge@gmail.com
+password: superpassword
 
 **5. SuperUser:**
 Manage users and system configurations.
 Create, Delete and Update User Roles for people using the Platform.
+username: superuser@gmail.com
+password: superpassword
 
 **Technology Stack**
 
